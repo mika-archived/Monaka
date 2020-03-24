@@ -15,6 +15,7 @@ const Container = styled.div`
   align-items: center;
   height: 20px;
   font-size: 14px;
+  color: #ccc;
 `;
 
 const Icon = styled.div`

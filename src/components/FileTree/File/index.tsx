@@ -14,21 +14,22 @@ type ContainerProps = {
 const Container = styled.div<ContainerProps>`
   display: flex;
   flex-flow: row nowrap;
-  justify-content: flex-start;
   align-items: center;
+  justify-content: flex-start;
   height: 20px;
-  font-size: 14px;
   padding: 0 0 0 ${(props) => 20 + props.depth * 16}px;
+  font-size: 14px;
+  color: #ccc;
 `;
 
 const Icon = styled.div`
-  height: 16px;
   width: 16px;
+  height: 16px;
 `;
 
 const Label = styled.span`
-  font-size: 14px;
   padding: 2px 2px 0 8px;
+  font-size: 14px;
 `;
 
 type Props = {
