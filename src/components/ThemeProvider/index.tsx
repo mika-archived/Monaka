@@ -2,6 +2,12 @@ import React from "react";
 
 export type Theme = {
   base: "light" | "dark";
+
+  // colors
+  activeBackground: string;
+  background: string;
+
+  activeFontColor: string;
   fontColor: string;
 };
 
@@ -11,11 +17,17 @@ type Props = {
 
 const LightTheme: Theme = {
   base: "light",
+  activeBackground: "",
+  background: "",
+  activeFontColor: "",
   fontColor: "#333",
 };
 
 const DarkTheme: Theme = {
   base: "dark",
+  activeBackground: "#1e1e1e",
+  background: "rgb(37, 37, 38)",
+  activeFontColor: "#fff",
   fontColor: "#ccc",
 };
 
