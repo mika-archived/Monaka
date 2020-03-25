@@ -10,7 +10,6 @@ type SVGComponent = React.FC<React.SVGProps<SVGSVGElement>>;
 // default_file.svg
 const DefaultFile: SVGComponent = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" {...props}>
-    <title>default_file</title>
     <path d="M20.414,2H5V30H27V8.586ZM7,28V4H19v6h6V28Z" fill="#c5c5c5" />
   </svg>
 );
@@ -18,7 +17,6 @@ const DefaultFile: SVGComponent = (props) => (
 // default_folder_opened.svg
 const FolderOpened: SVGComponent = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" {...props}>
-    <title>default_folder_opened</title>
     <path d="M27.4,5.5H18.2L16.1,9.7H4.3V26.5H29.5V5.5Zm0,18.7H6.6V11.8H27.4Zm0-14.5H19.2l1-2.1h7.1V9.7Z" fill="#dcb67a" />
     <polygon points="25.7 13.7 0.5 13.7 4.3 26.5 29.5 26.5 25.7 13.7" fill="#dcb67a" />
   </svg>
@@ -27,7 +25,6 @@ const FolderOpened: SVGComponent = (props) => (
 // default_folder.svg
 const FolderClosed: SVGComponent = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" {...props}>
-    <title>default_folder</title>
     <path d="M27.5,5.5H18.2L16.1,9.7H4.4V26.5H29.6V5.5Zm0,4.2H19.3l1.1-2.1h7.1Z" fill="#c09553" />
   </svg>
 );
@@ -35,7 +32,6 @@ const FolderClosed: SVGComponent = (props) => (
 // default_root_folder_opened.svg
 const RootFolderOpened: SVGComponent = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" {...props}>
-    <title>default_root_folder_opened</title>
     <path d="M27.4,5.5H18.2L16.1,9.7H4.3V26.5H29.5V5.5Zm0,18.7H6.6V11.8H27.4Zm0-14.5H19.2l1-2.1h7.1V9.7Z" fill="#dcb67a" />
     <polygon points="25.7 13.7 0.5 13.7 4.3 26.5 29.5 26.5 25.7 13.7" fill="#dcb67a" />
     <polygon points="19.635 31.25 13.711 31.25 23.505 9.75 29.49 9.75 19.635 31.25" fill="#dcb67a" />
@@ -46,7 +42,6 @@ const RootFolderOpened: SVGComponent = (props) => (
 // default_root_folder.svg
 const RootFolderClosed: SVGComponent = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" {...props}>
-    <title>default_root_folder</title>
     <path d="M27.5,5.5H18.2L16.1,9.7H4.4V26.5H29.6V5.5Zm0,4.2H19.3l1.1-2.1h7.1Z" fill="#c09553" />
     <polygon points="19.735 31.25 13.811 31.25 23.605 9.75 29.59 9.75 19.735 31.25" fill="#c09553" />
     <path d="M23.766,10H29.2L19.575,31H14.2Z" fill="#ffeebe" />

@@ -6,10 +6,12 @@ import Tree from "@/components/FileTree/Tree";
 import { getDepth } from "@/components/FileTree/utils";
 import { ChevronDown, ChevronRight, FolderClosed, FolderOpened } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
+import { ThemeContext } from "@/components/ThemeProvider";
 import { DirectoryItem, Item } from "@/types";
 
 type ContainerProps = {
   depth: number;
+  fontColor: string;
 };
 
 const Container = styled.div<ContainerProps>`
@@ -20,7 +22,7 @@ const Container = styled.div<ContainerProps>`
   height: 20px;
   padding: 0 0 0 ${(props) => 2 + props.depth * 16}px;
   font-size: 14px;
-  color: #ccc;
+  color: ${(props) => props.fontColor};
 `;
 
 const Icon = styled.div`
@@ -64,18 +66,22 @@ const Directory: React.FC<Props> = ({ item, items, onFolderStateChanged }) => {
   };
 
   return (
-    <IconContext.Consumer>
-      {(icons) => (
-        <>
-          <Container depth={depth} onClick={toggle}>
-            {getChevronComponent()}
-            <Icon>{getIconComponent(icons, item.title)}</Icon>
-            <Label>{item.title}</Label>
-          </Container>
-          {isOpen ? <Tree items={items} level={depth + 1} onFolderStateChanged={onFolderStateChanged} /> : null}
-        </>
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <IconContext.Consumer>
+          {(icons) => (
+            <>
+              <Container depth={depth} fontColor={theme.fontColor} onClick={toggle}>
+                {getChevronComponent()}
+                <Icon>{getIconComponent(icons, item.title)}</Icon>
+                <Label>{item.title}</Label>
+              </Container>
+              {isOpen ? <Tree items={items} level={depth + 1} onFolderStateChanged={onFolderStateChanged} /> : null}
+            </>
+          )}
+        </IconContext.Consumer>
       )}
-    </IconContext.Consumer>
+    </ThemeContext.Consumer>
   );
 };
 

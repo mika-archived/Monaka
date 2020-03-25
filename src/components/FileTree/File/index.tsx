@@ -3,12 +3,14 @@ import React from "react";
 import styled from "styled-components";
 
 import { FileItem, Item } from "@/types";
-import { IconContext } from "@/components/IconProvider";
 import { DefaultFile } from "@/components/Icon";
+import { IconContext } from "@/components/IconProvider";
+import { ThemeContext } from "@/components/ThemeProvider";
 import { getDepth } from "@/components/FileTree/utils";
 
 type ContainerProps = {
   depth: number;
+  fontColor: string;
 };
 
 const Container = styled.div<ContainerProps>`
@@ -19,7 +21,7 @@ const Container = styled.div<ContainerProps>`
   height: 20px;
   padding: 0 0 0 ${(props) => 20 + props.depth * 16}px;
   font-size: 14px;
-  color: #ccc;
+  color: ${(props) => props.fontColor};
 `;
 
 const Icon = styled.div`
@@ -48,14 +50,18 @@ const File: React.FC<Props> = ({ item, items }) => {
   };
 
   return (
-    <IconContext.Consumer>
-      {(icons) => (
-        <Container depth={depth}>
-          <Icon>{getIconComponent(icons, item.title)}</Icon>
-          <Label>{item.title}</Label>
-        </Container>
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <IconContext.Consumer>
+          {(icons) => (
+            <Container depth={depth} fontColor={theme.fontColor}>
+              <Icon>{getIconComponent(icons, item.title)}</Icon>
+              <Label>{item.title}</Label>
+            </Container>
+          )}
+        </IconContext.Consumer>
       )}
-    </IconContext.Consumer>
+    </ThemeContext.Consumer>
   );
 };
 

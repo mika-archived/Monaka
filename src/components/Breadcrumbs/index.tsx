@@ -3,19 +3,24 @@ import styled from "styled-components";
 
 import { ChevronRight, DefaultFile } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
+import { ThemeContext } from "@/components/ThemeProvider";
 
 type Props = {
   path: string;
 };
 
-const Container = styled.div`
+type ContainerProps = {
+  fontColor: string;
+};
+
+const Container = styled.div<ContainerProps>`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   justify-content: flex-start;
   height: 20px;
   font-size: 14px;
-  color: #ccc;
+  color: ${(props) => props.fontColor};
 `;
 
 const Icon = styled.div`
@@ -39,29 +44,33 @@ const Breadcrumbs: React.FC<Props> = ({ path }) => {
   };
 
   return (
-    <Container>
-      {paths.map((w, idx) => {
-        if (idx + 1 === paths.length) {
-          return (
-            <IconContext.Consumer>
-              {(icons) => (
-                <>
-                  <Icon>{getIconComponent(icons, w)}</Icon>
-                  <Label>{w}</Label>
-                </>
-              )}
-            </IconContext.Consumer>
-          );
-        }
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <Container fontColor={theme.fontColor}>
+          {paths.map((w, idx) => {
+            if (idx + 1 === paths.length) {
+              return (
+                <IconContext.Consumer>
+                  {(icons) => (
+                    <>
+                      <Icon>{getIconComponent(icons, w)}</Icon>
+                      <Label>{w}</Label>
+                    </>
+                  )}
+                </IconContext.Consumer>
+              );
+            }
 
-        return (
-          <>
-            <Label>{w}</Label>
-            <ChevronRight />
-          </>
-        );
-      })}
-    </Container>
+            return (
+              <>
+                <Label>{w}</Label>
+                <ChevronRight />
+              </>
+            );
+          })}
+        </Container>
+      )}
+    </ThemeContext.Consumer>
   );
 };
 
