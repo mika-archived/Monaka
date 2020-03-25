@@ -1,4 +1,4 @@
-import { Item } from ".";
+import { Item } from "@/types";
 
 export function getDepth(items: Item[], item: Item): number {
   let depth = 0;

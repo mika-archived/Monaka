@@ -1,6 +1,6 @@
 import React from "react";
 
-import { DirectoryItem } from "..";
+import { DirectoryItem } from "@/types";
 import Directory from ".";
 
 export default {

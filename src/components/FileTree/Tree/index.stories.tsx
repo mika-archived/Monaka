@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Item } from "..";
+import { Item } from "@/types";
 import Tree from ".";
 
 /**

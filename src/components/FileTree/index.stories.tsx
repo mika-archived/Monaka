@@ -1,6 +1,7 @@
 import React from "react";
 
-import FileTree, { Item } from ".";
+import { Item } from "@/types";
+import FileTree from ".";
 
 /**
  * + src

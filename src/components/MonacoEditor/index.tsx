@@ -6,16 +6,12 @@ type Props = {
   className?: string;
   language: string;
   value: string;
-  onValueChanged?: (code: string) => void;
+  onEditorMounted?: (valueGetter: () => string, instance: monaco.editor.IStandaloneCodeEditor) => void;
 
   options?: monaco.editor.IEditorConstructionOptions;
 };
 
-const Editor: React.FC<Props> = ({ className, language, onValueChanged, options, value }) => {
-  const onEditorMounted = (valueGetter: () => string, _: any) => {
-    if (onValueChanged) onValueChanged(valueGetter());
-  };
-
+const Editor: React.FC<Props> = ({ className, language, onEditorMounted, options, value }) => {
   return (
     <div className={className}>
       <MonacoEditor editorDidMount={onEditorMounted} height="100%" theme="dark" language={language} options={options} value={value} width="100%" />

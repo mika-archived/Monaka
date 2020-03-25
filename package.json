@@ -51,5 +51,8 @@
     "stylelint-processor-styled-components": "^1.10.0",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3"
+  },
+  "alias": {
+    "@": "./src/"
   }
 }

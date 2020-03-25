@@ -1,26 +1,9 @@
 /* eslint-disable import/no-cycle */
 import React, { useState } from "react";
 
-import Tree from "./Tree";
-import { sortPredicate } from "./utils";
-
-export type FileItem = {
-  type: "file";
-  id: string;
-  title: string;
-  content: string;
-  parentId: string | null;
-};
-
-export type DirectoryItem = {
-  type: "directory";
-  id: string;
-  title: string;
-  parentId: string | null;
-  state: "closed" | "opened";
-};
-
-export type Item = FileItem | DirectoryItem;
+import Tree from "@/components/FileTree/Tree";
+import { sortPredicate } from "@/components/FileTree/utils";
+import { Item } from "@/types";
 
 type Props = {
   items: Item[];

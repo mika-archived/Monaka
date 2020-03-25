@@ -2,10 +2,10 @@
 import React from "react";
 import styled from "styled-components";
 
-import { FileItem, Item } from "..";
-import { IconContext } from "../../IconProvider";
-import { DefaultFile } from "../../Icon";
-import { getDepth } from "../utils";
+import { FileItem, Item } from "@/types";
+import { IconContext } from "@/components/IconProvider";
+import { DefaultFile } from "@/components/Icon";
+import { getDepth } from "@/components/FileTree/utils";
 
 type ContainerProps = {
   depth: number;

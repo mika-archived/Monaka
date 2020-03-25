@@ -1,10 +1,10 @@
 /* eslint-disable import/no-cycle */
 import React from "react";
 
-import { Item } from "..";
-import Directory from "../Directory";
-import File from "../File";
-import { getDepth } from "../utils";
+import { Item } from "@/types";
+import Directory from "@/components/FileTree/Directory";
+import File from "@/components/FileTree/File";
+import { getDepth } from "@/components/FileTree/utils";
 
 type Props = {
   items: Item[];

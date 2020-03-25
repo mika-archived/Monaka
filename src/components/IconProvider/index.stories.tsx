@@ -1,9 +1,9 @@
 import React from "react";
 
+import Breadcrumbs from "@/components/Breadcrumbs";
+import File from "@/components/FileTree/File";
+import { FileItem } from "@/types";
 import IconProvider from ".";
-import Breadcrumbs from "../Breadcrumbs";
-import { FileItem } from "../FileTree";
-import File from "../FileTree/File";
 
 const TypeScript: React.FC = () => {
   return (

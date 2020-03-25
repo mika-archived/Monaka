@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { ChevronRight, DefaultFile } from "../Icon";
-import { IconContext } from "../IconProvider";
+import { ChevronRight, DefaultFile } from "@/components/Icon";
+import { IconContext } from "@/components/IconProvider";
 
 type Props = {
   path: string;
@@ -11,21 +11,21 @@ type Props = {
 const Container = styled.div`
   display: flex;
   flex-flow: row nowrap;
-  justify-content: flex-start;
   align-items: center;
+  justify-content: flex-start;
   height: 20px;
   font-size: 14px;
   color: #ccc;
 `;
 
 const Icon = styled.div`
-  height: 16px;
   width: 16px;
+  height: 16px;
 `;
 
 const Label = styled.span`
-  font-size: 14px;
   padding: 2px 2px 0 2px;
+  font-size: 14px;
 `;
 
 const Breadcrumbs: React.FC<Props> = ({ path }) => {

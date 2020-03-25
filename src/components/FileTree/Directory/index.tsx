@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { DirectoryItem, Item } from "..";
-import { IconContext } from "../../IconProvider";
-import Tree from "../Tree";
-import { getDepth } from "../utils";
-import { ChevronDown, ChevronRight, FolderClosed, FolderOpened } from "../../Icon";
+import Tree from "@/components/FileTree/Tree";
+import { getDepth } from "@/components/FileTree/utils";
+import { ChevronDown, ChevronRight, FolderClosed, FolderOpened } from "@/components/Icon";
+import { IconContext } from "@/components/IconProvider";
+import { DirectoryItem, Item } from "@/types";
 
 type ContainerProps = {
   depth: number;
