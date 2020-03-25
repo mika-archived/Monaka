@@ -1,0 +1,8 @@
+.simplebar-track.simplebar-horizontal .simplebar-scrollbar {
+  height: 4px;
+  border-radius: 0;
+}
+
+.simplebar-scrollbar::before {
+  background: rgba(255, 255, 255, 0.5);
+}

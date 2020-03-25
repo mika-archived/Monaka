@@ -5,6 +5,7 @@ export type Theme = {
 
   // colors
   activeBackground: string;
+  inactiveBackground: string;
   background: string;
 
   activeFontColor: string;
@@ -18,6 +19,7 @@ type Props = {
 const LightTheme: Theme = {
   base: "light",
   activeBackground: "",
+  inactiveBackground: "",
   background: "",
   activeFontColor: "",
   fontColor: "#333",
@@ -26,6 +28,7 @@ const LightTheme: Theme = {
 const DarkTheme: Theme = {
   base: "dark",
   activeBackground: "#1e1e1e",
+  inactiveBackground: "#2d2d2d",
   background: "rgb(37, 37, 38)",
   activeFontColor: "#fff",
   fontColor: "#ccc",
