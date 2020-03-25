@@ -22,6 +22,7 @@ const Container = styled.div<ContainerProps>`
   padding: 0 0 0 ${(props) => 20 + props.depth * 16}px;
   font-size: 14px;
   color: ${(props) => props.fontColor};
+  user-select: none;
 `;
 
 const Icon = styled.div`
