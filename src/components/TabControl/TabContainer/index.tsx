@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import SimpleBar from "simplebar-react";
-
-import "simplebar/src/simplebar.css";
-import "./index.css";
 
 import { TabContent } from "@/types";
+import Scroller from "@/components/Scroller";
 import TabItem from "@/components/TabControl/TabItem";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
 
@@ -44,7 +41,7 @@ const TabContainer: React.FC<Props> = ({ items, onTabClosed, onTabSelected }) =>
   };
 
   return (
-    <SimpleBar>
+    <Scroller>
       <ThemeContext.Consumer>
         {(theme) => (
           <Wrapper theme={theme}>
@@ -54,7 +51,7 @@ const TabContainer: React.FC<Props> = ({ items, onTabClosed, onTabSelected }) =>
           </Wrapper>
         )}
       </ThemeContext.Consumer>
-    </SimpleBar>
+    </Scroller>
   );
 };
 
