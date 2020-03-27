@@ -23,6 +23,7 @@ export default {
 
 const icons = [
   {
+    directory: false,
     extension: /\.ts$/,
     component: TypeScript,
   },

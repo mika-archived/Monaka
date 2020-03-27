@@ -1,9 +1,6 @@
 import React from "react";
 
-export type FileIcon = {
-  extension: RegExp;
-  component: React.FC<any>;
-};
+import { FileIcon } from "@/types";
 
 type Props = {
   icons: FileIcon[];

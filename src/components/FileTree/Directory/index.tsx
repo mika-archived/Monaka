@@ -8,6 +8,7 @@ import { ChevronDown, ChevronRight, FolderClosed, FolderOpened } from "@/compone
 import { IconContext } from "@/components/IconProvider";
 import { ThemeContext } from "@/components/ThemeProvider";
 import { DirectoryItem, Item } from "@/types";
+import { FileIcon, DirectoryItem, Item } from "@/types";
 
 type ContainerProps = {
   depth: number;
@@ -51,8 +52,8 @@ const Directory: React.FC<Props> = ({ item, items, onFolderStateChanged }) => {
 
   const depth = getDepth(items, item);
 
-  const getIconComponent = (icons: { extension: RegExp; component: React.FC<any> }[], dirname: string) => {
-    const icon = icons.find((w) => w.extension.test(dirname));
+  const getIconComponent = (icons: FileIcon[], dirname: string) => {
+    const icon = icons.find((w) => w.directory && w.extension.test(`${dirname}_${isOpen ? "opened" : "closed"}`));
 
     let Component = icon?.component;
     if (Component == null) Component = isOpen ? FolderOpened : FolderClosed;

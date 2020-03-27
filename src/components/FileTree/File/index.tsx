@@ -2,11 +2,11 @@
 import React from "react";
 import styled from "styled-components";
 
-import { FileItem, Item } from "@/types";
 import { DefaultFile } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
 import { ThemeContext } from "@/components/ThemeProvider";
 import { getDepth } from "@/components/FileTree/utils";
+import { FileIcon, FileItem, Item } from "@/types";
 
 type ContainerProps = {
   depth: number;
@@ -46,8 +46,8 @@ type Props = {
 const File: React.FC<Props> = ({ item, items }) => {
   const depth = getDepth(items, item);
 
-  const getIconComponent = (icons: { extension: RegExp; component: React.FC<any> }[], filename: string) => {
-    const icon = icons.find((w) => w.extension.test(filename));
+  const getIconComponent = (icons: FileIcon[], filename: string) => {
+    const icon = icons.find((w) => !w.directory && w.extension.test(filename));
     const Component = icon ? icon.component : DefaultFile;
 
     return <Component />;

@@ -1,3 +1,9 @@
+export type FileIcon = {
+  directory: boolean;
+  extension: RegExp;
+  component: React.FC<any>;
+};
+
 export type FileItem = {
   type: "file";
   id: string;
