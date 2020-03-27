@@ -36,7 +36,7 @@ const Title = styled.div<ThemedProps>`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 2px 0 0 0;
+  padding: 2px 0 0 4px;
   user-select: none;
   background: ${(props) => props.theme.inactiveBackground};
 `;

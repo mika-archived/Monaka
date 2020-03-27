@@ -27,12 +27,14 @@ const Container = styled.div<ContainerProps>`
 `;
 
 const Icon = styled.div`
+  flex: 0 0 16px;
   width: 16px;
   height: 16px;
 `;
 
 const Label = styled.span`
-  padding: 2px 2px 0 8px;
+  flex: 0 1 auto;
+  padding: 2px 4px 0 8px;
   font-size: 14px;
 `;
 
