@@ -8,6 +8,7 @@ import { ThemeContext, Theme } from "@/components/ThemeProvider";
 
 type Props = {
   items: TabContent[];
+  selectedItem?: TabContent | null;
   onTabClosed?: (item: TabContent) => void;
   onTabSelected?: (item: TabContent) => void;
 };
@@ -28,7 +29,7 @@ const Item = styled(TabItem)`
   margin-right: 1px;
 `;
 
-const TabContainer: React.FC<Props> = ({ items, onTabClosed, onTabSelected }) => {
+const TabContainer: React.FC<Props> = ({ items, selectedItem, onTabClosed, onTabSelected }) => {
   const [activatedTab, setActivatedTab] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,6 +40,10 @@ const TabContainer: React.FC<Props> = ({ items, onTabClosed, onTabSelected }) =>
 
     setActivatedTab(items[items.length - 1].item.id);
   }, [items]);
+
+  useEffect(() => {
+    setActivatedTab(selectedItem?.item?.id || null);
+  }, [selectedItem]);
 
   const getIsTabActivated = (item: TabContent) => {
     return activatedTab === item.item.id;
