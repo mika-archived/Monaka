@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { ChevronRight, DefaultFile } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
+import Scroller from "@/components/Scroller";
 import { ThemeContext } from "@/components/ThemeProvider";
 
 type Props = {
@@ -21,6 +22,7 @@ const Container = styled.div<ContainerProps>`
   height: 20px;
   font-size: 14px;
   color: ${(props) => props.fontColor};
+  white-space: nowrap;
 `;
 
 const Icon = styled.div`
@@ -44,33 +46,35 @@ const Breadcrumbs: React.FC<Props> = ({ path }) => {
   };
 
   return (
-    <ThemeContext.Consumer>
-      {(theme) => (
-        <Container fontColor={theme.fontColor}>
-          {paths.map((w, idx) => {
-            if (idx + 1 === paths.length) {
-              return (
-                <IconContext.Consumer>
-                  {(icons) => (
-                    <>
-                      <Icon>{getIconComponent(icons, w)}</Icon>
-                      <Label>{w}</Label>
-                    </>
-                  )}
-                </IconContext.Consumer>
-              );
-            }
+    <Scroller>
+      <ThemeContext.Consumer>
+        {(theme) => (
+          <Container fontColor={theme.fontColor}>
+            {paths.map((w, idx) => {
+              if (idx + 1 === paths.length) {
+                return (
+                  <IconContext.Consumer>
+                    {(icons) => (
+                      <>
+                        <Icon>{getIconComponent(icons, w)}</Icon>
+                        <Label>{w}</Label>
+                      </>
+                    )}
+                  </IconContext.Consumer>
+                );
+              }
 
-            return (
-              <>
-                <Label>{w}</Label>
-                <ChevronRight />
-              </>
-            );
-          })}
-        </Container>
-      )}
-    </ThemeContext.Consumer>
+              return (
+                <>
+                  <Label>{w}</Label>
+                  <ChevronRight />
+                </>
+              );
+            })}
+          </Container>
+        )}
+      </ThemeContext.Consumer>
+    </Scroller>
   );
 };
 
