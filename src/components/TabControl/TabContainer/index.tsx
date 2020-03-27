@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { TabContent } from "@/types";
@@ -30,6 +30,15 @@ const Item = styled(TabItem)`
 
 const TabContainer: React.FC<Props> = ({ items, onTabClosed, onTabSelected }) => {
   const [activatedTab, setActivatedTab] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!items || items.length === 0) return;
+
+    const hasSelected = items.find((w) => w.item.id === activatedTab);
+    if (hasSelected) return;
+
+    setActivatedTab(items[items.length - 1].item.id);
+  }, [items]);
 
   const getIsTabActivated = (item: TabContent) => {
     return activatedTab === item.item.id;
