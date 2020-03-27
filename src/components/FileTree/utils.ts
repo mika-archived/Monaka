@@ -13,6 +13,10 @@ export function getDepth(items: Item[], item: Item): number {
   return depth;
 }
 
+export function getIsSelected(item: Item, selected: Item | null): boolean {
+  return item.id === selected?.id;
+}
+
 // https://codesandbox.io/s/84jkx
 export function sortPredicate(a: Item, b: Item): number {
   let first = a;

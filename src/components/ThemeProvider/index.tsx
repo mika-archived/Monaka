@@ -6,6 +6,8 @@ export type Theme = {
   // colors
   activeBackground: string;
   inactiveBackground: string;
+  highlightBackground: string;
+  hoverBackground: string;
   background: string;
 
   activeFontColor: string;
@@ -20,6 +22,8 @@ const LightTheme: Theme = {
   base: "light",
   activeBackground: "",
   inactiveBackground: "",
+  highlightBackground: "",
+  hoverBackground: "",
   background: "",
   activeFontColor: "",
   fontColor: "#333",
@@ -29,7 +33,9 @@ const DarkTheme: Theme = {
   base: "dark",
   activeBackground: "#1e1e1e",
   inactiveBackground: "#2d2d2d",
-  background: "rgb(37, 37, 38)",
+  highlightBackground: "#094771",
+  hoverBackground: "#2a2d2e",
+  background: "#252526",
   activeFontColor: "#fff",
   fontColor: "#ccc",
 };

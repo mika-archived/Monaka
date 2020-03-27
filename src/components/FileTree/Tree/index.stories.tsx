@@ -71,5 +71,5 @@ export const Default = () => {
     setItems(newItems);
   };
 
-  return <Tree items={items} level={0} onFolderStateChanged={onFolderStateChanged} />;
+  return <Tree items={items} level={0} onFolderStateChanged={onFolderStateChanged} selectedItem={null} />;
 };

@@ -47,13 +47,13 @@ const js = {
 
 export const IconExistsFile = () => (
   <IconProvider icons={icons}>
-    <File items={[ts]} item={ts} />
+    <File items={[ts]} item={ts} selectedItem={null} />
   </IconProvider>
 );
 
 export const IconNoExistsFile = () => (
   <IconProvider icons={icons}>
-    <File items={[js]} item={js} />
+    <File items={[js]} item={js} selectedItem={null} />
   </IconProvider>
 );
 

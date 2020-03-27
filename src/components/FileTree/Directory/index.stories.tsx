@@ -15,7 +15,7 @@ const item = {
   state: "closed",
 } as DirectoryItem;
 
-export const Default = () => <Directory items={[item]} item={item} />;
+export const Default = () => <Directory items={[item]} item={item} selectedItem={null} />;
 
 const items = [
   {
@@ -28,4 +28,6 @@ const items = [
   { ...item, parentId: "df415ce9-eafa-4841-bf76-6329a2f576ce" },
 ];
 
-export const WithOneDepth = () => <Directory items={items} item={items[1] as DirectoryItem} />;
+export const WithOneDepth = () => <Directory items={items} item={items[1] as DirectoryItem} selectedItem={null} />;
+
+export const WithSelected = () => <Directory items={items} item={items[1] as DirectoryItem} selectedItem={items[1]} />;

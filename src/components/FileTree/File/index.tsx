@@ -4,13 +4,13 @@ import styled from "styled-components";
 
 import { DefaultFile } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
-import { ThemeContext } from "@/components/ThemeProvider";
-import { getDepth } from "@/components/FileTree/utils";
+import { ThemeContext, Theme } from "@/components/ThemeProvider";
+import { getDepth, getIsSelected } from "@/components/FileTree/utils";
 import { FileIcon, FileItem, Item } from "@/types";
 
 type ContainerProps = {
   depth: number;
-  fontColor: string;
+  theme: Theme;
 };
 
 const Container = styled.div<ContainerProps>`
@@ -18,12 +18,21 @@ const Container = styled.div<ContainerProps>`
   flex-flow: row nowrap;
   align-items: center;
   justify-content: flex-start;
+  width: 100%;
   height: 20px;
-  padding: 0 0 0 ${(props) => 20 + props.depth * 16}px;
+  padding: 2px 0 2px ${(props) => 20 + props.depth * 16}px;
   font-size: 14px;
-  color: ${(props) => props.fontColor};
+  color: ${(props) => props.theme.fontColor};
   white-space: nowrap;
   user-select: none;
+
+  &.selected {
+    background: ${(props) => props.theme.highlightBackground};
+  }
+
+  &:hover:not(.selected) {
+    background: ${(props) => props.theme.hoverBackground};
+  }
 `;
 
 const Icon = styled.div`
@@ -41,10 +50,13 @@ const Label = styled.span`
 type Props = {
   item: FileItem;
   items: Item[];
+  selectedItem: Item | null;
+  onSelectStateChanged?: (item: Item | null) => void;
 };
 
-const File: React.FC<Props> = ({ item, items }) => {
+const File: React.FC<Props> = ({ item, items, selectedItem, onSelectStateChanged }) => {
   const depth = getDepth(items, item);
+  const clazz = getIsSelected(item, selectedItem) ? "selected" : undefined;
 
   const getIconComponent = (icons: FileIcon[], filename: string) => {
     const icon = icons.find((w) => !w.directory && w.extension.test(filename));
@@ -53,12 +65,18 @@ const File: React.FC<Props> = ({ item, items }) => {
     return <Component />;
   };
 
+  const onClickItem = (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    if (onSelectStateChanged) onSelectStateChanged(item);
+  };
+
   return (
     <ThemeContext.Consumer>
       {(theme) => (
         <IconContext.Consumer>
           {(icons) => (
-            <Container depth={depth} fontColor={theme.fontColor}>
+            <Container className={clazz} depth={depth} theme={theme} onClick={onClickItem}>
               <Icon>{getIconComponent(icons, item.title)}</Icon>
               <Label>{item.title}</Label>
             </Container>

@@ -15,7 +15,7 @@ const item = {
   parentId: null,
 } as FileItem;
 
-export const Default = () => <File items={[item]} item={item} />;
+export const Default = () => <File items={[item]} item={item} selectedItem={null} />;
 
 const items = [
   {
@@ -28,4 +28,6 @@ const items = [
   { ...item, parentId: "df415ce9-eafa-4841-bf76-6329a2f576ce" },
 ];
 
-export const WithOneDepth = () => <File items={items} item={items[1] as FileItem} />;
+export const WithOneDepth = () => <File items={items} item={items[1] as FileItem} selectedItem={null} />;
+
+export const WithSelected = () => <File items={items} item={items[1] as FileItem} selectedItem={items[1]} />;

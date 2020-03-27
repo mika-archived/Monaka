@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import React, { useState } from "react";
+import styled from "styled-components";
 
 import Tree from "@/components/FileTree/Tree";
 import { sortPredicate } from "@/components/FileTree/utils";
@@ -7,11 +8,16 @@ import { Item } from "@/types";
 
 type Props = {
   items: Item[];
-  onSelectedItem?: (id: string) => void;
+  onSelectedItemChanged?: (item: Item | null) => void;
 };
 
-const FileTree: React.FC<Props> = ({ items: initialItems }) => {
+const Container = styled.div`
+  padding-bottom: 20px;
+`;
+
+const FileTree: React.FC<Props> = ({ items: initialItems, onSelectedItemChanged }) => {
   const [items, setItems] = useState(initialItems.sort(sortPredicate));
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
   const onFolderStateChanged = (id: string, state: "closed" | "opened") => {
     const newItems = items.slice();
@@ -21,7 +27,16 @@ const FileTree: React.FC<Props> = ({ items: initialItems }) => {
     setItems(newItems);
   };
 
-  return <Tree items={items} level={0} onFolderStateChanged={onFolderStateChanged} />;
+  const onSelectedStateChanged = (item: Item | null) => {
+    setSelectedItem(item);
+    if (onSelectedItemChanged) onSelectedItemChanged(item);
+  };
+
+  return (
+    <Container>
+      <Tree items={items} selectedItem={selectedItem} level={0} onFolderStateChanged={onFolderStateChanged} onSelectStateChanged={onSelectedStateChanged} />
+    </Container>
+  );
 };
 
 export default FileTree;
