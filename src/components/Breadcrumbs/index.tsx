@@ -51,24 +51,27 @@ const Breadcrumbs: React.FC<Props> = ({ path }) => {
         {(theme) => (
           <Container fontColor={theme.fontColor}>
             {paths.map((w, idx) => {
+              const key = paths.slice(0, idx).join("/");
               if (idx + 1 === paths.length) {
                 return (
-                  <IconContext.Consumer>
-                    {(icons) => (
-                      <>
-                        <Icon>{getIconComponent(icons, w)}</Icon>
-                        <Label>{w}</Label>
-                      </>
-                    )}
-                  </IconContext.Consumer>
+                  <React.Fragment key={key}>
+                    <IconContext.Consumer>
+                      {(icons) => (
+                        <>
+                          <Icon>{getIconComponent(icons, w)}</Icon>
+                          <Label>{w}</Label>
+                        </>
+                      )}
+                    </IconContext.Consumer>
+                  </React.Fragment>
                 );
               }
 
               return (
-                <>
+                <React.Fragment key={key}>
                   <Label>{w}</Label>
                   <ChevronRight />
-                </>
+                </React.Fragment>
               );
             })}
           </Container>
