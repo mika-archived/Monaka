@@ -12,6 +12,11 @@ export type FileItem = {
   parentId: string | null;
 };
 
+export type FileType = {
+  extension: RegExp;
+  language: string;
+};
+
 export type DirectoryItem = {
   type: "directory";
   id: string;
