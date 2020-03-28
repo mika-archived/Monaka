@@ -4,8 +4,8 @@ import styled from "styled-components";
 import * as Icons from ".";
 
 const IconX16 = styled.div`
-  height: 16px;
   width: 16px;
+  height: 16px;
 `;
 
 export default {
