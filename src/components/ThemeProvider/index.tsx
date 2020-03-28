@@ -6,6 +6,7 @@ export type Theme = {
   // colors
   activeBackground: string;
   inactiveBackground: string;
+  editorBackground: string;
   highlightBackground: string;
   hoverBackground: string;
   background: string;
@@ -22,6 +23,7 @@ const LightTheme: Theme = {
   base: "light",
   activeBackground: "",
   inactiveBackground: "",
+  editorBackground: "",
   highlightBackground: "",
   hoverBackground: "",
   background: "",
@@ -32,6 +34,7 @@ const LightTheme: Theme = {
 const DarkTheme: Theme = {
   base: "dark",
   activeBackground: "#1e1e1e",
+  editorBackground: "#202124",
   inactiveBackground: "#2d2d2d",
   highlightBackground: "#094771",
   hoverBackground: "#2a2d2e",
