@@ -48,6 +48,8 @@ export const RootFolderOpened = () => (
 
 // #region Microsoft/vscode-icons
 
+export const CircleFilled = () => <Icons.CircleFilled />;
+
 export const ChevronDown = () => <Icons.ChevronDown />;
 
 export const ChevronRight = () => <Icons.ChevronRight />;

@@ -17,6 +17,10 @@ export default {
   title: "components/TabControl/TabItem",
 };
 
-export const ActivatedTab = () => <TabItem item={content} isActivated />;
+export const ActivatedTab = () => <TabItem item={content} isActivated isShowUnsaved={false} />;
 
-export const InactivatedTab = () => <TabItem item={content} isActivated={false} />;
+export const InactivatedTab = () => <TabItem item={content} isActivated={false} isShowUnsaved={false} />;
+
+export const ActivatedAndUnsavedTab = () => <TabItem item={content} isActivated isShowUnsaved />;
+
+export const InactivatedButUnsavedTab = () => <TabItem item={content} isActivated={false} isShowUnsaved />;

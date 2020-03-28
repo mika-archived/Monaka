@@ -8,6 +8,7 @@ import { ThemeContext, Theme } from "@/components/ThemeProvider";
 
 type Props = {
   items: TabContent[];
+  bufferedItems?: TabContent[] | null;
   selectedItem?: TabContent | null;
   onTabClosed?: (item: TabContent) => void;
   onTabSelected?: (item: TabContent) => void;
@@ -29,7 +30,7 @@ const Item = styled(TabItem)`
   margin-right: 1px;
 `;
 
-const TabContainer: React.FC<Props> = ({ items, selectedItem, onTabClosed, onTabSelected }) => {
+const TabContainer: React.FC<Props> = ({ items, bufferedItems, selectedItem, onTabClosed, onTabSelected }) => {
   const [activatedTab, setActivatedTab] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,8 +46,12 @@ const TabContainer: React.FC<Props> = ({ items, selectedItem, onTabClosed, onTab
     setActivatedTab(selectedItem?.item?.id || null);
   }, [selectedItem]);
 
-  const getIsTabActivated = (item: TabContent) => {
-    return activatedTab === item.item.id;
+  const getIsTabActivated = ({ item }: TabContent) => {
+    return activatedTab === item.id;
+  };
+
+  const getIsTabUnsaved = ({ item }: TabContent) => {
+    return !!bufferedItems?.find((w) => w.item.id === item.id);
   };
 
   const onTabClicked = (item: TabContent) => {
@@ -60,7 +65,7 @@ const TabContainer: React.FC<Props> = ({ items, selectedItem, onTabClosed, onTab
         {(theme) => (
           <Wrapper theme={theme}>
             {items.map((w) => (
-              <Item item={w} isActivated={getIsTabActivated(w)} onTabClicked={onTabClicked} onCloseButtonClicked={onTabClosed} />
+              <Item key={w.item.id} item={w} isActivated={getIsTabActivated(w)} isShowUnsaved={getIsTabUnsaved(w)} onTabClicked={onTabClicked} onCloseButtonClicked={onTabClosed} />
             ))}
           </Wrapper>
         )}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { TabContent } from "@/types";
-import { Close, DefaultFile } from "@/components/Icon";
+import { CircleFilled, Close, DefaultFile } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
 
@@ -10,6 +10,7 @@ type Props = {
   className?: string;
   item: TabContent;
   isActivated: boolean;
+  isShowUnsaved: boolean;
   onCloseButtonClicked?: (item: TabContent) => void;
   onTabClicked?: (item: TabContent) => void;
 };
@@ -54,7 +55,11 @@ const EmptySpace = styled.div`
   width: 24px;
 `;
 
-const TabItem: React.FC<Props> = ({ className, item, isActivated, onCloseButtonClicked, onTabClicked }) => {
+const UnsavedButton = styled(CircleFilled)`
+  padding: 2px 4px;
+`;
+
+const TabItem: React.FC<Props> = ({ className, item, isActivated, isShowUnsaved, onCloseButtonClicked, onTabClicked }) => {
   const [isHovered, setHovered] = useState(false);
 
   const getIconComponent = (icons: { extension: RegExp; component: React.FC<any> }[], filename: string) => {
@@ -62,6 +67,14 @@ const TabItem: React.FC<Props> = ({ className, item, isActivated, onCloseButtonC
     const Component = icon ? icon.component : DefaultFile;
 
     return <Component />;
+  };
+
+  const getAttributeComponent = (activated: boolean, hovered: boolean, unsaved: boolean, onClick: (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void) => {
+    if (unsaved) {
+      return hovered ? <CloseButton onClick={onClick} /> : <UnsavedButton onClick={onClick} />;
+    }
+
+    return activated || hovered ? <CloseButton onClick={onClick} /> : <EmptySpace />;
   };
 
   const onClickTabWrapper = () => {
@@ -90,7 +103,7 @@ const TabItem: React.FC<Props> = ({ className, item, isActivated, onCloseButtonC
               <TabContainer>
                 <Icon>{getIconComponent(icons, item.item.title)}</Icon>
                 <Label>{item.item.title}</Label>
-                {isActivated || isHovered ? <CloseButton onClick={onClickCloseButton} /> : <EmptySpace />}
+                {getAttributeComponent(isActivated, isHovered, isShowUnsaved, onClickCloseButton)}
               </TabContainer>
             )}
           </IconContext.Consumer>
