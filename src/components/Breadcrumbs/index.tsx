@@ -23,6 +23,7 @@ const Container = styled.div<ContainerProps>`
   font-size: 14px;
   color: ${(props) => props.fontColor};
   white-space: nowrap;
+  user-select: none;
 `;
 
 const Icon = styled.div`
