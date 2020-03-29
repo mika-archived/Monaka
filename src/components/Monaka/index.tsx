@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import * as editor from "monaco-editor";
-import { monaco, Monaco } from "@monaco-editor/react";
+import * as monacoEditor from "monaco-editor";
 
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ExplorerSection from "@/components/Explorer/ExplorerItem";
@@ -11,7 +10,7 @@ import MonacoEditor from "@/components/MonacoEditor";
 import TabContainer from "@/components/TabControl/TabContainer";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
 import useSize from "@/hooks/useSize";
-import { Item, TabContent } from "@/types";
+import { Item, FileItem } from "@/types";
 
 type Props = {
   items: Item[];
@@ -24,7 +23,7 @@ type ThemedProps = {
 };
 
 const BreadcrumbsContainer = styled.div<ThemedProps>`
-  padding: 2px 2px 2px 12px;
+  padding: 4px 2px 4px 12px;
   background: ${(props) => props.theme.editorBackground};
 `;
 
@@ -60,7 +59,7 @@ const Editor = styled(MonacoEditor)`
 const EditorContainer = styled.div`
   position: relative;
   width: 100%;
-  height: calc(100% - 27px);
+  height: calc(100% - 30px);
 `;
 
 const EditorCalculator = styled.div`
@@ -81,38 +80,32 @@ const Header = styled.div<ThemedProps>`
   color: ${(props) => props.theme.fontColor};
 `;
 
+const TabControl = styled(TabContainer)`
+  order: 0;
+`;
+
 const InnerTabContent = styled.div`
+  order: 1;
   height: 100%;
   padding: 0;
+  margin-top: -7.2px; /* shit div element */
 `;
 
 const Monaka: React.FC<Props> = ({ items, onItemContentChanged }) => {
-  const [tabs, setTabs] = useState<TabContent[]>([]);
-  const [models, setModels] = useState<editor.editor.ITextModel[]>([]);
-  const [currentTab, setCurrentTabInner] = useState<TabContent | null>(null);
-  const [bufferedTabs, setBufferedTabsInner] = useState<TabContent[]>([]);
+  const [tabs, setTabs] = useState<FileItem[]>([]);
+  const [models, setModels] = useState<monacoEditor.editor.ITextModel[]>([]);
+  const [currentTab, setCurrentTabInner] = useState<FileItem | null>(null);
+  const [bufferedTabs, setBufferedTabsInner] = useState<FileItem[]>([]);
   // Workaround: some functions are stored in `useRef` container by @monaco-editor/react, so required reference values for use these variables.
-  const bufferedTabsRef = useRef<TabContent[]>([]);
-  const currentTabRef = useRef<TabContent | null>(null);
-  const getter = useRef<() => string>();
-  const editorInstance = useRef<editor.editor.IStandaloneCodeEditor>();
-  const monacoInstance = useRef<Monaco>();
+  const bufferedTabsRef = useRef<FileItem[]>([]);
+  const currentTabRef = useRef<FileItem | null>(null);
+  const editorInstance = useRef<monacoEditor.editor.IStandaloneCodeEditor>();
+  const monacoInstance = useRef<typeof monacoEditor>();
   const editorContainer = useRef<HTMLDivElement | null>(null);
   const languages = useContext(LanguageContext);
   const size = useSize();
 
-  useEffect(() => {
-    const init = async () => {
-      monacoInstance.current = await monaco.init();
-    };
-
-    init();
-
-    return () => {
-      models.forEach((w) => w.dispose());
-    };
-  }, []);
-
+  // resize monaco-editor
   useEffect(() => {
     if (editorInstance.current) {
       const width = editorContainer.current!.clientWidth;
@@ -121,12 +114,12 @@ const Monaka: React.FC<Props> = ({ items, onItemContentChanged }) => {
     }
   }, [size]);
 
-  const setBufferedTabs = (newBufferedTabs: TabContent[]) => {
+  const setBufferedTabs = (newBufferedTabs: FileItem[]) => {
     bufferedTabsRef.current = newBufferedTabs;
     setBufferedTabsInner(newBufferedTabs);
   };
 
-  const setCurrentTab = (newCurrentTab: TabContent | null) => {
+  const setCurrentTab = (newCurrentTab: FileItem | null) => {
     currentTabRef.current = newCurrentTab;
     setCurrentTabInner(newCurrentTab);
   };
@@ -145,56 +138,71 @@ const Monaka: React.FC<Props> = ({ items, onItemContentChanged }) => {
     return path.reverse().join("/");
   };
 
-  // eslint-disable-next-line no-shadow
-  const onSaveCurrentTab = (editor: editor.editor.ICodeEditor) => {
-    if (onItemContentChanged) onItemContentChanged(currentTabRef.current!.item, editor.getValue());
+  const findModelById = (item: Item) => {
+    return models.find((w) => w.uri.path === `/${item.id}`);
+  };
 
-    const newBufferedTabs = bufferedTabsRef.current.slice().filter((w) => w.item.id !== currentTabRef.current!.item.id);
+  const createEditorModel = (item: FileItem) => {
+    if (!monacoInstance.current) {
+      // when 1st model creation, monaco instance is undefined
+      return;
+    }
+
+    const uri = monacoInstance.current.Uri.from({ scheme: "monaka", authority: "models", path: `/${item.id}` });
+    return monacoInstance.current.editor.createModel(item.content, languages.find((w) => w.extension.test(item.title))?.language, uri);
+  };
+
+  const deleteEditorModel = (item: FileItem) => {
+    const model = findModelById(item);
+    if (!model) return;
+
+    model.dispose();
+  };
+
+  // eslint-disable-next-line no-shadow
+  const onSaveCurrentTab = (editor: monacoEditor.editor.ICodeEditor) => {
+    if (onItemContentChanged) onItemContentChanged(currentTabRef.current!, editor.getValue());
+
+    const newBufferedTabs = bufferedTabsRef.current.slice().filter((w) => w.id !== currentTabRef.current!.id);
     setBufferedTabs(newBufferedTabs);
   };
 
   const onSelectedItemChanged = (item: Item | null) => {
     if (item === null || item.type !== "file") return;
-    if (!tabs.find((w) => w.item.id === item.id)) {
-      setTabs([...tabs, { item } as TabContent]);
+    if (!tabs.find((w) => w.id === item.id)) {
+      setTabs([...tabs, item]);
     }
 
-    setCurrentTab({ item } as TabContent);
+    setCurrentTab(item);
 
-    if (models.find((w) => w.uri.path === `/${item.id}`)) {
-      editorInstance.current!.setModel(models.find((w) => w.uri.path === `/${item.id}`)!);
+    if (findModelById(item)) {
+      editorInstance.current!.setModel(findModelById(item)!);
     } else {
-      const uri = editor.Uri.from({ scheme: "monaka", path: `/${item.id}` });
-      const model = monacoInstance.current?.editor?.createModel(item.content, languages.find((w) => w.extension.test(item.title))?.language, uri)!;
-      setModels([...models, model]);
-      if (editorInstance.current) editorInstance.current!.setModel(model);
+      const model = createEditorModel(item);
+      if (model) {
+        setModels([...models, model]);
+        if (editorInstance.current) editorInstance.current!.setModel(model);
+      }
     }
   };
 
-  const onTabClosed = ({ item }: TabContent) => {
-    if (bufferedTabsRef.current.find((w) => w.item.id === item.id)) {
+  const onTabClosed = (item: FileItem) => {
+    if (bufferedTabsRef.current.find((w) => w.id === item.id)) {
       // eslint-disable-next-line no-alert
       if (window.confirm(`Tab ${item.title} is unsaved, save this?`)) {
-        const model = models.find((w) => w.uri.path === `/${item.id}`);
+        const model = findModelById(item);
         if (onItemContentChanged) onItemContentChanged(item, model?.getValue() || "");
       }
     }
 
-    const closedModel = models.find((w) => w.uri.path === `/${item.id}`);
-    if (closedModel) {
-      try {
-        closedModel.dispose();
-      } catch (err) {
-        // ignored
-      }
-    }
+    deleteEditorModel(item);
 
-    const nextIndex = tabs.findIndex((w) => w.item.id === item.id);
-    const newTabs = tabs.slice().filter((w) => w.item.id !== item.id);
+    const nextIndex = tabs.findIndex((w) => w.id === item.id);
+    const newTabs = tabs.slice().filter((w) => w.id !== item.id);
     const tab = newTabs[nextIndex >= newTabs.length - 1 ? newTabs.length - 1 : nextIndex];
     const newModels = models.slice().filter((w) => w.uri.path !== `/${item.id}`);
     const model = newModels[nextIndex >= newTabs.length - 1 ? newTabs.length - 1 : nextIndex];
-    const newBufferedTabs = bufferedTabsRef.current.slice().filter((w) => w.item.id !== item.id);
+    const newBufferedTabs = bufferedTabsRef.current.slice().filter((w) => w.id !== item.id);
 
     setCurrentTab(tab);
     setTabs(newTabs);
@@ -203,32 +211,35 @@ const Monaka: React.FC<Props> = ({ items, onItemContentChanged }) => {
     editorInstance.current!.setModel(model);
   };
 
-  const onTabSelected = (tab: TabContent) => {
+  const onTabSelected = (tab: FileItem) => {
     setCurrentTab(tab);
 
-    const model = models.find((w) => w.uri.path === `/${tab.item.id}`)!;
+    const model = models.find((w) => w.uri.path === `/${tab.id}`)!;
     editorInstance.current!.setModel(model);
   };
 
-  const onContentChanged = (_1: editor.editor.IModelContentChangedEvent, content: string | undefined) => {
+  const onContentChanged = (content: string, _event: any) => {
     const tab = currentTabRef.current!;
-    if (tab.item.content === content) return;
+    if (tab.content === content) return;
 
     const newBufferedTabs = bufferedTabsRef.current.slice();
-    if (newBufferedTabs.find((w) => w.item.id === tab.item.id)) return;
+    if (newBufferedTabs.find((w) => w.id === tab.id)) return;
     newBufferedTabs.push(tab);
 
     setBufferedTabs(newBufferedTabs);
   };
 
-  const onEditorMounted = (valueGetter: () => string, instance: editor.editor.IStandaloneCodeEditor) => {
-    getter.current = valueGetter;
+  const onEditorMounted = (instance: monacoEditor.editor.IStandaloneCodeEditor, monaco: typeof monacoEditor) => {
+    monacoInstance.current = monaco;
     editorInstance.current = instance;
 
-    // eslint-disable-next-line no-shadow
-    const monaco = monacoInstance.current!;
+    // When the 1st model is set, the Monaco Editor has not yet been initialized, so we will initialize it here.
+    const model = createEditorModel(currentTabRef.current!);
+    if (model) {
+      setModels([model]);
+      editorInstance.current!.setModel(model);
+    }
 
-    editorInstance.current!.setModel(models[0]);
     editorInstance.current!.addAction({
       id: "save",
       label: "Save File",
@@ -236,6 +247,12 @@ const Monaka: React.FC<Props> = ({ items, onItemContentChanged }) => {
       keybindings: [(monaco.KeyMod.CtrlCmd as any) | (monaco.KeyCode.KEY_S as any)],
       run: onSaveCurrentTab,
     });
+  };
+
+  const onEditorUnmounted = () => {
+    // cleanup editor instances
+    monacoInstance.current = undefined;
+    editorInstance.current = undefined;
   };
 
   return (
@@ -249,27 +266,27 @@ const Monaka: React.FC<Props> = ({ items, onItemContentChanged }) => {
             </ExplorerSection>
           </Explorer>
           <Content>
-            <TabContainer items={tabs} bufferedItems={bufferedTabs} selectedItem={currentTab} onTabClosed={onTabClosed} onTabSelected={onTabSelected} />
             <InnerTabContent>
               {currentTab ? (
                 <>
                   <BreadcrumbsContainer theme={theme}>
-                    <Breadcrumbs path={getPathFromItem(currentTab.item, items)} />
+                    <Breadcrumbs path={getPathFromItem(currentTab, items)} />
                   </BreadcrumbsContainer>
                   <EditorContainer>
                     {/* Workaround: The Monaco Editor resized gradually, so this component calculates the size by itself. */}
                     <EditorCalculator ref={editorContainer} />
                     <Editor
-                      language="typescript"
-                      value={currentTab.item.content}
+                      value={currentTab.content}
                       options={{ automaticLayout: true }}
                       onContentChanged={onContentChanged}
                       onEditorMounted={onEditorMounted}
+                      onEditorUnmounted={onEditorUnmounted}
                     />
                   </EditorContainer>
                 </>
               ) : null}
             </InnerTabContent>
+            <TabControl items={tabs} bufferedItems={bufferedTabs} selectedItem={currentTab} onTabClosed={onTabClosed} onTabSelected={onTabSelected} />
           </Content>
         </Container>
       )}

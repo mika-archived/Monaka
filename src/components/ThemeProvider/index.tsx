@@ -1,7 +1,7 @@
 import React from "react";
 
 export type Theme = {
-  base: "light" | "dark";
+  base: "vs-light" | "vs-dark";
 
   // colors
   activeBackground: string;
@@ -20,7 +20,7 @@ type Props = {
 };
 
 const LightTheme: Theme = {
-  base: "light",
+  base: "vs-light",
   activeBackground: "",
   inactiveBackground: "",
   editorBackground: "",
@@ -32,7 +32,7 @@ const LightTheme: Theme = {
 };
 
 const DarkTheme: Theme = {
-  base: "dark",
+  base: "vs-dark",
   activeBackground: "#1e1e1e",
   editorBackground: "#202124",
   inactiveBackground: "#2d2d2d",

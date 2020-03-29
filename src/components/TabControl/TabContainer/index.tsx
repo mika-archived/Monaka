@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { TabContent } from "@/types";
+import { FileItem } from "@/types";
 import Scroller from "@/components/Scroller";
 import TabItem from "@/components/TabControl/TabItem";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
 
 type Props = {
-  items: TabContent[];
-  bufferedItems?: TabContent[] | null;
-  selectedItem?: TabContent | null;
-  onTabClosed?: (item: TabContent) => void;
-  onTabSelected?: (item: TabContent) => void;
+  items: FileItem[];
+  bufferedItems?: FileItem[] | null;
+  selectedItem?: FileItem | null;
+  onTabClosed?: (item: FileItem) => void;
+  onTabSelected?: (item: FileItem) => void;
 };
 
 type WrapperProps = {
@@ -36,26 +36,26 @@ const TabContainer: React.FC<Props> = ({ items, bufferedItems, selectedItem, onT
   useEffect(() => {
     if (!items || items.length === 0) return;
 
-    const hasSelected = items.find((w) => w.item.id === activatedTab);
+    const hasSelected = items.find((w) => w.id === activatedTab);
     if (hasSelected) return;
 
-    setActivatedTab(items[items.length - 1].item.id);
+    setActivatedTab(items[items.length - 1].id);
   }, [items]);
 
   useEffect(() => {
-    setActivatedTab(selectedItem?.item?.id || null);
+    setActivatedTab(selectedItem?.id || null);
   }, [selectedItem]);
 
-  const getIsTabActivated = ({ item }: TabContent) => {
+  const getIsTabActivated = (item: FileItem) => {
     return activatedTab === item.id;
   };
 
-  const getIsTabUnsaved = ({ item }: TabContent) => {
-    return !!bufferedItems?.find((w) => w.item.id === item.id);
+  const getIsTabUnsaved = (item: FileItem) => {
+    return !!bufferedItems?.find((w) => w.id === item.id);
   };
 
-  const onTabClicked = (item: TabContent) => {
-    setActivatedTab(item.item.id);
+  const onTabClicked = (item: FileItem) => {
+    setActivatedTab(item.id);
     if (onTabSelected) onTabSelected(item);
   };
 
@@ -65,7 +65,7 @@ const TabContainer: React.FC<Props> = ({ items, bufferedItems, selectedItem, onT
         {(theme) => (
           <Wrapper theme={theme}>
             {items.map((w) => (
-              <Item key={w.item.id} item={w} isActivated={getIsTabActivated(w)} isShowUnsaved={getIsTabUnsaved(w)} onTabClicked={onTabClicked} onCloseButtonClicked={onTabClosed} />
+              <Item key={w.id} item={w} isActivated={getIsTabActivated(w)} isShowUnsaved={getIsTabUnsaved(w)} onTabClicked={onTabClicked} onCloseButtonClicked={onTabClosed} />
             ))}
           </Wrapper>
         )}

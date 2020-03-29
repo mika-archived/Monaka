@@ -27,6 +27,6 @@ export type DirectoryItem = {
 
 export type Item = FileItem | DirectoryItem;
 
-export type TabContent = {
-  item: FileItem;
+export type ExplorerSectionItem = {
+  title: string;
 };

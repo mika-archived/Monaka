@@ -6,17 +6,22 @@
   "repository": "ssh://git@github.com/mika-f/monaka",
   "author": "Mikazuki <mikazuki_fuyuno@outlook.com>",
   "license": "MIT",
-  "private": true,
+  "files": [
+    "dist"
+  ],
+  "private": false,
   "scripts": {
+    "build": "rimraf ./dist && ttsc --project tsconfig.build.json",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@monaco-editor/react": "^3.1.2",
+    "monaco-editor": "^0.20.0",
     "react": "^16.13.1",
     "react-animate-height": "^2.0.20",
     "react-contextmenu": "^2.13.0",
     "react-dom": "^16.13.1",
+    "react-monaco-editor": "^0.35.0",
     "react-transition-group": "^4.3.0",
     "simplebar-react": "^2.1.0",
     "styled-components": "^5.0.1"
@@ -31,9 +36,12 @@
     "@types/react-dom": "^16.9.5",
     "@types/react-transition-group": "^4.2.4",
     "@types/styled-components": "^5.0.1",
+    "@types/vfile-message": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
+    "@zerollup/ts-transform-paths": "^1.7.15",
     "babel-loader": "^8.1.0",
+    "css-loader": "^3.4.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.10.1",
@@ -44,9 +52,10 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
-    "monaco-editor": "^0.20.0",
+    "monaco-editor-webpack-plugin": "^1.9.0",
     "parcel": "^1.12.4",
     "prettier": "^2.0.1",
+    "rimraf": "^3.0.2",
     "stylelint": "^13.2.1",
     "stylelint-config-prettier": "^8.0.1",
     "stylelint-config-recess-order": "^2.0.4",
@@ -54,9 +63,11 @@
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.10.0",
     "ts-loader": "^6.2.2",
-    "typescript": "^3.8.3"
+    "ttypescript": "^1.5.10",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1"
   },
-  "alias": {
-    "@": "./src/"
+  "resolutions": {
+    "@types/react": "^16.9.25"
   }
 }

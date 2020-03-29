@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { TabContent } from "@/types";
+import { FileItem } from "@/types";
 import { CircleFilled, Close, DefaultFile } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
 
 type Props = {
   className?: string;
-  item: TabContent;
+  item: FileItem;
   isActivated: boolean;
   isShowUnsaved: boolean;
   onCloseButtonClicked?: (item: TabContent) => void;
