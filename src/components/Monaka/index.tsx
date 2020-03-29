@@ -15,7 +15,9 @@ import { Item, FileItem } from "@/types";
 type Props = {
   items: Item[];
 
-  onItemContentChanged?: (item: Item, content: string) => void;
+  onItemCreated?: (item: Item) => void;
+  onItemChanged?: (item: Item) => void;
+  onItemDeleted?: (item: Item) => void;
 };
 
 type ThemedProps = {
@@ -91,7 +93,7 @@ const InnerTabContent = styled.div`
   margin-top: -7.2px; /* shit div element */
 `;
 
-const Monaka: React.FC<Props> = ({ items, onItemContentChanged }) => {
+const Monaka: React.FC<Props> = ({ items, onItemChanged, onItemCreated, onItemDeleted }) => {
   const [tabs, setTabs] = useState<FileItem[]>([]);
   const [models, setModels] = useState<monacoEditor.editor.ITextModel[]>([]);
   const [currentTab, setCurrentTabInner] = useState<FileItem | null>(null);
@@ -161,7 +163,7 @@ const Monaka: React.FC<Props> = ({ items, onItemContentChanged }) => {
 
   // eslint-disable-next-line no-shadow
   const onSaveCurrentTab = (editor: monacoEditor.editor.ICodeEditor) => {
-    if (onItemContentChanged) onItemContentChanged(currentTabRef.current!, editor.getValue());
+    if (onItemChanged) onItemChanged({ ...currentTabRef.current!, content: editor.getValue() });
 
     const newBufferedTabs = bufferedTabsRef.current.slice().filter((w) => w.id !== currentTabRef.current!.id);
     setBufferedTabs(newBufferedTabs);
@@ -191,7 +193,7 @@ const Monaka: React.FC<Props> = ({ items, onItemContentChanged }) => {
       // eslint-disable-next-line no-alert
       if (window.confirm(`Tab ${item.title} is unsaved, save this?`)) {
         const model = findModelById(item);
-        if (onItemContentChanged) onItemContentChanged(item, model?.getValue() || "");
+        if (onItemChanged) onItemChanged({ content: model?.getValue() || "", ...item });
       }
     }
 

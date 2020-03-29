@@ -228,11 +228,17 @@ export default {
 export const Default = () => {
   const [state, setState] = useState(MonakaProject.items);
 
-  const onContentChanged = (item: Item, content: string) => {
-    if (item.type === "directory") return; // ????
-
+  const onItemChanged = (item: Item) => {
     const newState = state.slice();
-    (newState[newState.findIndex((w) => w.type === "file" && w.id === item.id)] as FileItem).content = content;
+    const updIndex = newState.findIndex((w) => w.id === item.id);
+
+    // common
+    newState[updIndex].title = item.title;
+    newState[updIndex].parentId = item.parentId;
+
+    if (item.type === "file") {
+      (newState[updIndex] as FileItem).content = item.content;
+    }
 
     setState(newState);
   };
@@ -241,7 +247,7 @@ export const Default = () => {
     <LanguageProvider languages={languages}>
       <IconProvider icons={icons}>
         <Container>
-          <Monaka items={MonakaProject.items} onItemContentChanged={onContentChanged} />
+          <Monaka items={MonakaProject.items} onItemChanged={onItemChanged} />
         </Container>
       </IconProvider>
     </LanguageProvider>
