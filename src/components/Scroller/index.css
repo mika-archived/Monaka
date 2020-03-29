@@ -1,3 +1,7 @@
+.simplebar-mask {
+  z-index: auto; /* Hmm... */
+}
+
 .simplebar-track.simplebar-horizontal .simplebar-scrollbar {
   height: 4px;
   border-radius: 0;
