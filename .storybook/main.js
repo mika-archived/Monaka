@@ -1,4 +1,5 @@
 const path = require("path");
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 
 module.exports = {
   stories: ["../src/**/*.stories.tsx"],
@@ -15,6 +16,9 @@ module.exports = {
 
     config.resolve.extensions.push(".ts", ".tsx");
     config.resolve.alias = { "@": path.resolve(__dirname, "../src") };
+
+    config.plugins.push(new MonacoWebpackPlugin());
+
     return config;
   },
 };
