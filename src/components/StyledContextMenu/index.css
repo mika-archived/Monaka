@@ -1,0 +1,63 @@
+.react-contextmenu {
+  z-index: 3500;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: #ccc;
+  text-align: left;
+  pointer-events: none;
+  background: #252526;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  outline: none;
+  box-shadow: 2px 2px 2px 2px #202124;
+  opacity: 0;
+  transition: opacity 250ms ease !important;
+}
+
+.react-contextmenu.react-contextmenu--visible {
+  z-index: 3500;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.react-contextmenu-item {
+  padding: 3px 20px;
+  line-height: 1.5;
+  color: #ccc;
+  white-space: nowrap;
+  cursor: pointer;
+  background: 0 0;
+  border: 0;
+}
+
+.react-contextmenu-item.react-contextmenu-item--active,
+.react-contextmenu-item.react-contextmenu-item--selected {
+  color: #ccc;
+  text-decoration: none;
+  background: #094771;
+  border-color: #20a0ff;
+}
+
+.react-contextmenu-item.react-contextmenu-item--disabled,
+.react-contextmenu-item.react-contextmenu-item--disabled:hover {
+  color: #878a8c;
+  background-color: transparent;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.react-contextmenu-item--divider {
+  padding: 2px 0;
+  margin: 0 4px;
+  margin-bottom: 3px;
+  cursor: inherit;
+  border-bottom: 1px solid #ccc;
+}
+
+.react-contextmenu-wrapper {
+  height: 50% !important;
+  max-height: calc(100% - 7.2px) !important;
+  padding: 0;
+  margin-bottom: 0.2px;
+}
