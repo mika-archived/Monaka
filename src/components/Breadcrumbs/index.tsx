@@ -20,6 +20,7 @@ const Container = styled.div<ContainerProps>`
   align-items: center;
   justify-content: flex-start;
   height: 20px;
+  overflow-y: hidden;
   font-size: 14px;
   color: ${(props) => props.fontColor};
   white-space: nowrap;
