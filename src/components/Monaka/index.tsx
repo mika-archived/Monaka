@@ -224,6 +224,8 @@ const Monaka: React.FC<Props> = ({ items, onItemChanged, onItemCreated, onItemDe
     const tab = currentTabRef.current!;
     if (tab.content === content) return;
 
+    tab.content = content;
+
     const newBufferedTabs = bufferedTabsRef.current.slice();
     if (newBufferedTabs.find((w) => w.id === tab.id)) return;
     newBufferedTabs.push(tab);
