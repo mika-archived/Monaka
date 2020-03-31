@@ -1,7 +1,9 @@
 import React from "react";
+import styled from "styled-components";
 
 import { Item } from "@/types";
 import FileTree from ".";
+import Scroller from "../Scroller";
 
 /**
  * + src
@@ -56,8 +58,18 @@ const items = [
   },
 ] as Item[];
 
+const Container = styled.div`
+  width: 200px;
+`;
+
 export default {
   title: "components/FileTree/Composite",
 };
 
-export const Default = () => <FileTree items={items} />;
+export const Default = () => (
+  <Container>
+    <Scroller>
+      <FileTree items={items} />
+    </Scroller>
+  </Container>
+);
