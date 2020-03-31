@@ -228,26 +228,26 @@ export default {
 export const Default = () => {
   const [state, setState] = useState(MonakaProject.items);
 
-  const onItemChanged = (item: Item) => {
-    const newState = state.slice();
-    const updIndex = newState.findIndex((w) => w.id === item.id);
+  const onItemsChanged = (changesets: Item[]) => {
+    const items = state.slice();
 
-    // common
-    newState[updIndex].title = item.title;
-    newState[updIndex].parentId = item.parentId;
+    for (let i = 0; i < changesets.length; i += 1) {
+      const item = changesets[i];
+      const index = items.findIndex((w) => w.id === item.id);
+      items[index].title = item.title;
+      items[index].parentId = item.parentId;
 
-    if (item.type === "file") {
-      (newState[updIndex] as FileItem).content = item.content;
+      if (item.type === "file") (items[index] as FileItem).content = item.content;
     }
 
-    setState(newState);
+    setState(items);
   };
 
   return (
     <LanguageProvider languages={languages}>
       <IconProvider icons={icons}>
         <Container>
-          <Monaka items={MonakaProject.items} onItemChanged={onItemChanged} />
+          <Monaka items={MonakaProject.items} onItemsChanged={onItemsChanged} />
         </Container>
       </IconProvider>
     </LanguageProvider>

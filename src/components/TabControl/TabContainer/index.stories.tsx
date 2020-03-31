@@ -41,9 +41,9 @@ const initialItems = [
 export const TabContainerWithItems = () => {
   const [items, setItems] = useState(initialItems);
 
-  const onTabClosed = (item: FileItem) => {
+  const onCloseThisClicked = (item: FileItem) => {
     setItems(items.filter((w) => w.id !== item.id));
   };
 
-  return <TabContainer items={items} onTabClosed={onTabClosed} />;
+  return <TabContainer items={items} onCloseThisClicked={onCloseThisClicked} />;
 };

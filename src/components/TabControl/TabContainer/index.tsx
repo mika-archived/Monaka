@@ -10,8 +10,13 @@ type Props = {
   items: FileItem[];
   bufferedItems?: FileItem[] | null;
   selectedItem?: FileItem | null;
-  onTabClosed?: (item: FileItem) => void;
   onTabSelected?: (item: FileItem) => void;
+
+  onCloseAllClicked?: () => void;
+  onCloseOthersClicked?: (item: FileItem) => void;
+  onCloseRightsClicked?: (item: FileItem) => void;
+  onCloseSavedClicked?: () => void;
+  onCloseThisClicked?: (item: FileItem) => void;
 };
 
 type WrapperProps = {
@@ -30,7 +35,17 @@ const Item = styled(TabItem)`
   margin-right: 1px;
 `;
 
-const TabContainer: React.FC<Props> = ({ items, bufferedItems, selectedItem, onTabClosed, onTabSelected }) => {
+const TabContainer: React.FC<Props> = ({
+  items,
+  bufferedItems,
+  selectedItem,
+  onTabSelected,
+  onCloseAllClicked,
+  onCloseOthersClicked,
+  onCloseRightsClicked,
+  onCloseSavedClicked,
+  onCloseThisClicked,
+}) => {
   const [activatedTab, setActivatedTab] = useState<string | null>(null);
 
   useEffect(() => {
@@ -65,7 +80,18 @@ const TabContainer: React.FC<Props> = ({ items, bufferedItems, selectedItem, onT
         {(theme) => (
           <Wrapper theme={theme}>
             {items.map((w) => (
-              <Item key={w.id} item={w} isActivated={getIsTabActivated(w)} isShowUnsaved={getIsTabUnsaved(w)} onTabClicked={onTabClicked} onCloseButtonClicked={onTabClosed} />
+              <Item
+                key={w.id}
+                item={w}
+                isActivated={getIsTabActivated(w)}
+                isShowUnsaved={getIsTabUnsaved(w)}
+                onTabClicked={onTabClicked}
+                onCloseAllClicked={onCloseAllClicked}
+                onCloseOthersClicked={onCloseOthersClicked}
+                onCloseRightsClicked={onCloseRightsClicked}
+                onCloseSavedClicked={onCloseSavedClicked}
+                onCloseThisClicked={onCloseThisClicked}
+              />
             ))}
           </Wrapper>
         )}

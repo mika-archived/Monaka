@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { ContextMenu, MenuItem } from "react-contextmenu";
 import styled from "styled-components";
 
 import { FileItem } from "@/types";
 import { CircleFilled, Close, DefaultFile } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
+import StyledContextMenu from "@/components/StyledContextMenu";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
 
 type Props = {
@@ -11,8 +13,12 @@ type Props = {
   item: FileItem;
   isActivated: boolean;
   isShowUnsaved: boolean;
-  onCloseButtonClicked?: (item: TabContent) => void;
-  onTabClicked?: (item: TabContent) => void;
+  onCloseAllClicked?: () => void;
+  onCloseOthersClicked?: (item: FileItem) => void;
+  onCloseRightsClicked?: (item: FileItem) => void;
+  onCloseSavedClicked?: () => void;
+  onCloseThisClicked?: (item: FileItem) => void;
+  onTabClicked?: (item: FileItem) => void;
 };
 
 type TabWrapperProps = {
@@ -59,7 +65,18 @@ const UnsavedButton = styled(CircleFilled)`
   padding: 2px 4px;
 `;
 
-const TabItem: React.FC<Props> = ({ className, item, isActivated, isShowUnsaved, onCloseButtonClicked, onTabClicked }) => {
+const TabItem: React.FC<Props> = ({
+  className,
+  item,
+  isActivated,
+  isShowUnsaved,
+  onCloseAllClicked,
+  onCloseOthersClicked,
+  onCloseRightsClicked,
+  onCloseSavedClicked,
+  onCloseThisClicked,
+  onTabClicked,
+}) => {
   const [isHovered, setHovered] = useState(false);
 
   const getIconComponent = (icons: { extension: RegExp; component: React.FC<any> }[], filename: string) => {
@@ -84,32 +101,75 @@ const TabItem: React.FC<Props> = ({ className, item, isActivated, isShowUnsaved,
   const onClickCloseButton = (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     event.stopPropagation();
 
-    if (onCloseButtonClicked) onCloseButtonClicked(item);
+    if (onCloseThisClicked) onCloseThisClicked(item);
   };
 
+  const onClickCloseAll = () => {
+    if (onCloseAllClicked) onCloseAllClicked();
+  };
+
+  const onClickCloseOthers = () => {
+    if (onCloseOthersClicked) onCloseOthersClicked(item);
+  };
+
+  const onClickCloseRights = () => {
+    if (onCloseRightsClicked) onCloseRightsClicked(item);
+  };
+
+  const onClickCloseSaved = () => {
+    if (onCloseSavedClicked) onCloseSavedClicked();
+  };
+
+  const onClickCloseThis = () => {
+    if (onCloseThisClicked) onCloseThisClicked(item);
+  };
+
+  const id = `TabItem-ContextMenu-${item.id}`;
+
   return (
-    <ThemeContext.Consumer>
-      {(theme) => (
-        <TabWrapper
-          className={className}
-          isActivated={isActivated}
-          theme={theme}
-          onClick={onClickTabWrapper}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-        >
-          <IconContext.Consumer>
-            {(icons) => (
-              <TabContainer>
-                <Icon>{getIconComponent(icons, item.item.title)}</Icon>
-                <Label>{item.item.title}</Label>
-                {getAttributeComponent(isActivated, isHovered, isShowUnsaved, onClickCloseButton)}
-              </TabContainer>
-            )}
-          </IconContext.Consumer>
-        </TabWrapper>
-      )}
-    </ThemeContext.Consumer>
+    <>
+      <StyledContextMenu id={id}>
+        <ThemeContext.Consumer>
+          {(theme) => (
+            <TabWrapper
+              className={className}
+              isActivated={isActivated}
+              theme={theme}
+              onClick={onClickTabWrapper}
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+            >
+              <IconContext.Consumer>
+                {(icons) => (
+                  <TabContainer>
+                    <Icon>{getIconComponent(icons, item.title)}</Icon>
+                    <Label>{item.title}</Label>
+                    {getAttributeComponent(isActivated, isHovered, isShowUnsaved, onClickCloseButton)}
+                  </TabContainer>
+                )}
+              </IconContext.Consumer>
+            </TabWrapper>
+          )}
+        </ThemeContext.Consumer>
+      </StyledContextMenu>
+      <ContextMenu id={id}>
+        <MenuItem onClick={onClickCloseThis} disabled={!onCloseThisClicked}>
+          Close
+        </MenuItem>
+        <MenuItem onClick={onClickCloseOthers} disabled={!onCloseOthersClicked}>
+          Close Others
+        </MenuItem>
+        <MenuItem onClick={onClickCloseRights} disabled={!onCloseRightsClicked}>
+          Close to the Right
+        </MenuItem>
+        <MenuItem onClick={onClickCloseSaved} disabled={!onCloseSavedClicked}>
+          Close Saved
+        </MenuItem>
+        <MenuItem onClick={onClickCloseAll} disabled={!onCloseAllClicked}>
+          Close All
+        </MenuItem>
+      </ContextMenu>
+    </>
   );
 };
 
