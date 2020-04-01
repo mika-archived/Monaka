@@ -54,10 +54,3 @@
   cursor: inherit;
   border-bottom: 1px solid #ccc;
 }
-
-.react-contextmenu-wrapper {
-  height: 50% !important;
-  max-height: calc(100% - 7.2px) !important;
-  padding: 0;
-  margin-bottom: 0.2px;
-}

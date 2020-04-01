@@ -35,6 +35,17 @@ const TabWrapper = styled.div<TabWrapperProps>`
   text-overflow: ellipsis;
   user-select: none;
   background-color: ${(props) => (props.isActivated ? props.theme.activeBackground : props.theme.inactiveBackground)};
+
+  &.react-contextmenu-wrapper {
+    /* I don't know hot to fix it */
+    height: 37px;
+  }
+`;
+
+const ContextMenuWrapper = styled.div`
+  .react-contextmenu-wrapper {
+    height: 37px;
+  }
 `;
 
 const TabContainer = styled.div`
@@ -127,10 +138,10 @@ const TabItem: React.FC<Props> = ({
   const id = `TabItem-ContextMenu-${item.id}`;
 
   return (
-    <>
-      <StyledContextMenu id={id}>
-        <ThemeContext.Consumer>
-          {(theme) => (
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <ContextMenuWrapper>
+          <StyledContextMenu id={id}>
             <TabWrapper
               className={className}
               isActivated={isActivated}
@@ -149,27 +160,27 @@ const TabItem: React.FC<Props> = ({
                 )}
               </IconContext.Consumer>
             </TabWrapper>
-          )}
-        </ThemeContext.Consumer>
-      </StyledContextMenu>
-      <ContextMenu id={id}>
-        <MenuItem onClick={onClickCloseThis} disabled={!onCloseThisClicked}>
-          Close
-        </MenuItem>
-        <MenuItem onClick={onClickCloseOthers} disabled={!onCloseOthersClicked}>
-          Close Others
-        </MenuItem>
-        <MenuItem onClick={onClickCloseRights} disabled={!onCloseRightsClicked}>
-          Close to the Right
-        </MenuItem>
-        <MenuItem onClick={onClickCloseSaved} disabled={!onCloseSavedClicked}>
-          Close Saved
-        </MenuItem>
-        <MenuItem onClick={onClickCloseAll} disabled={!onCloseAllClicked}>
-          Close All
-        </MenuItem>
-      </ContextMenu>
-    </>
+          </StyledContextMenu>
+          <ContextMenu id={id}>
+            <MenuItem onClick={onClickCloseThis} disabled={!onCloseThisClicked}>
+              Close
+            </MenuItem>
+            <MenuItem onClick={onClickCloseOthers} disabled={!onCloseOthersClicked}>
+              Close Others
+            </MenuItem>
+            <MenuItem onClick={onClickCloseRights} disabled={!onCloseRightsClicked}>
+              Close to the Right
+            </MenuItem>
+            <MenuItem onClick={onClickCloseSaved} disabled={!onCloseSavedClicked}>
+              Close Saved
+            </MenuItem>
+            <MenuItem onClick={onClickCloseAll} disabled={!onCloseAllClicked}>
+              Close All
+            </MenuItem>
+          </ContextMenu>
+        </ContextMenuWrapper>
+      )}
+    </ThemeContext.Consumer>
   );
 };
 

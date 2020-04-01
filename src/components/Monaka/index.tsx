@@ -90,7 +90,6 @@ const InnerTabContent = styled.div`
   order: 1;
   height: 100%;
   padding: 0;
-  margin-top: -7.2px; /* shit div element */
 `;
 
 const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemDeleted }) => {
