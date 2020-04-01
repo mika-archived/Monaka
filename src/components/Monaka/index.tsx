@@ -25,7 +25,7 @@ type ThemedProps = {
 };
 
 const BreadcrumbsContainer = styled.div<ThemedProps>`
-  padding: 4px 2px 4px 12px;
+  padding: 5px 2px 5px 12px;
   background: ${(props) => props.theme.editorBackground};
 `;
 
