@@ -19,8 +19,7 @@ const Container = styled.div<ContainerProps>`
   flex-flow: row nowrap;
   align-items: center;
   justify-content: flex-start;
-  height: 20px;
-  overflow-y: hidden;
+  height: 100%;
   font-size: 14px;
   color: ${(props) => props.fontColor};
   white-space: nowrap;
@@ -73,7 +72,9 @@ const Breadcrumbs: React.FC<Props> = ({ path }) => {
               return (
                 <React.Fragment key={key}>
                   <Label>{w}</Label>
-                  <ChevronRight />
+                  <Icon>
+                    <ChevronRight />
+                  </Icon>
                 </React.Fragment>
               );
             })}
