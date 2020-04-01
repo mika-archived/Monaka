@@ -30,6 +30,7 @@ const Container = styled.div<ContainerProps>`
 const Icon = styled.div`
   width: 16px;
   height: 16px;
+  padding: 2px 2px 0 2px;
 `;
 
 const Label = styled.span`
