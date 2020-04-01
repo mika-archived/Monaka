@@ -231,6 +231,22 @@ const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemD
 
   // #endregion
 
+  // #region FileTree Event Handlers
+
+  const onCreatedItem = (item: Item) => {
+    if (onItemCreated) onItemCreated(item);
+  };
+
+  const onChangedItem = (item: Item) => {
+    if (onItemsChanged) onItemsChanged([item]);
+  };
+
+  const onDeletedItem = (item: Item) => {
+    if (onItemDeleted) onItemDeleted(item);
+  };
+
+  // #endregion
+
   // #region TabContainer Event Handlers
 
   const showConfirmDialog = (item: FileItem): boolean => {
@@ -338,7 +354,7 @@ const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemD
           <SideArea>
             <Project title="Monaka Project">
               <ProjectSection title="Explorer">
-                <FileTree items={items} onSelectedItemChanged={onSelectedItemChanged} />
+                <FileTree items={items} onItemChanged={onChangedItem} onItemCreated={onCreatedItem} onItemDeleted={onDeletedItem} onSelectedItemChanged={onSelectedItemChanged} />
               </ProjectSection>
             </Project>
           </SideArea>
