@@ -27,6 +27,7 @@ export type DirectoryItem = {
 
 export type Item = FileItem | DirectoryItem;
 
-export type ExplorerSectionItem = {
+export type ProjectSection = {
+  fixed?: boolean;
   title: string;
 };

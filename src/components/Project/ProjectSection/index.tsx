@@ -2,18 +2,22 @@ import React, { useState } from "react";
 import AnimateHeight from "react-animate-height";
 import styled from "styled-components";
 
-import { ExplorerSectionItem } from "@/types";
+import { ProjectSection as ProjectSectionProps } from "@/types";
 import { ChevronDown, ChevronRight } from "@/components/Icon";
 import Scroller from "@/components/Scroller";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
 
 type Props = {
   className?: string;
-} & ExplorerSectionItem;
+} & ProjectSectionProps;
 
 type ThemedProps = {
   theme: Theme;
 };
+
+type WrapperProps = {
+  fixed: boolean;
+} & ThemedProps;
 
 const Content = styled.div`
   padding: 2px;
@@ -36,16 +40,17 @@ const Title = styled.div<ThemedProps>`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 2px 0 0 4px;
+  padding: 2px 0 2px 4px;
   user-select: none;
   background: ${(props) => props.theme.inactiveBackground};
 `;
 
-const Wrapper = styled.div<ThemedProps>`
+const Wrapper = styled.div<WrapperProps>`
+  flex: ${(props) => (props.fixed ? "0 0" : "1 1")} auto;
   overflow: hidden;
 `;
 
-const ExplorerItem: React.FC<Props> = ({ children, className, title }) => {
+const ProjectSection: React.FC<Props> = ({ children, className, fixed, title }) => {
   const [isExpanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => setExpanded(!isExpanded);
@@ -53,7 +58,7 @@ const ExplorerItem: React.FC<Props> = ({ children, className, title }) => {
   return (
     <ThemeContext.Consumer>
       {(theme) => (
-        <Wrapper className={className} theme={theme}>
+        <Wrapper className={className} theme={theme} fixed={fixed || false}>
           <Title onClick={toggleExpanded} theme={theme}>
             <Icon>{isExpanded ? <ChevronDown /> : <ChevronRight />}</Icon>
             <Label theme={theme}>{title}</Label>
@@ -70,4 +75,4 @@ const ExplorerItem: React.FC<Props> = ({ children, className, title }) => {
   );
 };
 
-export default ExplorerItem;
+export default ProjectSection;

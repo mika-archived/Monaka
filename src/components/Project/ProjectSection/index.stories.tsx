@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Item } from "@/types";
-import ExplorerSection from ".";
+import ProjectSection from ".";
 import FileTree from "../../FileTree";
 
 /**
@@ -63,16 +63,16 @@ const LimitedWidth = styled.div`
 `;
 
 export default {
-  title: "components/Explorer/ExplorerSection",
+  title: "components/Project/ProjectSection",
 };
 
 export const Default = () => (
   <LimitedWidth>
-    <ExplorerSection title="Monaka">
+    <ProjectSection title="Monaka">
       <FileTree items={items} />
-    </ExplorerSection>
-    <ExplorerSection title="Monaka">
+    </ProjectSection>
+    <ProjectSection title="Monaka">
       <FileTree items={items} />
-    </ExplorerSection>
+    </ProjectSection>
   </LimitedWidth>
 );

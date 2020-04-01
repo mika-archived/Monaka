@@ -3,10 +3,11 @@ import styled from "styled-components";
 import * as monacoEditor from "monaco-editor";
 
 import Breadcrumbs from "@/components/Breadcrumbs";
-import ExplorerSection from "@/components/Explorer/ExplorerItem";
 import FileTree from "@/components/FileTree";
 import { LanguageContext } from "@/components/LanguageProvider";
 import MonacoEditor from "@/components/MonacoEditor";
+import Project from "@/components/Project";
+import ProjectSection from "@/components/Project/ProjectSection";
 import TabContainer from "@/components/TabControl/TabContainer";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
 import useSize from "@/hooks/useSize";
@@ -25,7 +26,7 @@ type ThemedProps = {
 };
 
 const BreadcrumbsContainer = styled.div<ThemedProps>`
-  padding: 5px 2px 5px 12px;
+  padding: 4px 2px 5px 12px;
   background: ${(props) => props.theme.editorBackground};
 `;
 
@@ -72,14 +73,8 @@ const EditorCalculator = styled.div`
   left: 0;
 `;
 
-const Explorer = styled.div`
-  flex: 0 0 250px;
-`;
-
-const Header = styled.div<ThemedProps>`
-  padding: 8px 22px;
-  font-size: 14px;
-  color: ${(props) => props.theme.fontColor};
+const SideArea = styled.div`
+  width: 250px;
 `;
 
 const TabControl = styled(TabContainer)`
@@ -340,12 +335,13 @@ const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemD
     <ThemeContext.Consumer>
       {(theme) => (
         <Container theme={theme}>
-          <Explorer>
-            <Header theme={theme}>Arteria Project</Header>
-            <ExplorerSection title="Explorer">
-              <FileTree items={items} onSelectedItemChanged={onSelectedItemChanged} />
-            </ExplorerSection>
-          </Explorer>
+          <SideArea>
+            <Project title="Monaka Project">
+              <ProjectSection title="Explorer">
+                <FileTree items={items} onSelectedItemChanged={onSelectedItemChanged} />
+              </ProjectSection>
+            </Project>
+          </SideArea>
           <Content>
             <InnerTabContent>
               {currentTab ? (
