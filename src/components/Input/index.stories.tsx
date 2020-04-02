@@ -14,13 +14,13 @@ export default {
 export const Default = () => {
   const [value, setValue] = useState("");
 
-  const onValueChanged = (newValue: string) => {
-    setValue(newValue);
+  const onValueChanged = (newValue: any) => {
+    if (typeof newValue === "string") setValue(newValue);
   };
 
   return (
     <LimitedWidth>
-      <Input value={value} onContentChanged={onValueChanged} />
+      <Input value={value} onSubmit={onValueChanged} />
     </LimitedWidth>
   );
 };

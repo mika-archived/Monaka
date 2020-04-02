@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import { ThemeContext, Theme } from "../ThemeProvider";
 
 type Props = {
   value: string;
-  onContentChanged?: (value: string) => void;
-};
+  onMounted?: (ref: HTMLInputElement) => void;
+  onSubmit?: (value: string) => void;
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
 type ThemedProps = {
   theme: Theme;
@@ -14,7 +15,7 @@ type ThemedProps = {
 
 const StyledInput = styled.input<ThemedProps>`
   padding: 4px 8px;
-  font-size: 14px;
+  font-size: 12px;
   color: ${(props) => props.theme.fontColor};
   background: ${(props) => (props.theme as Theme).editorBackground};
   border: solid 1px ${(props) => (props.theme as Theme).activeBackground};
@@ -25,20 +26,38 @@ const StyledInput = styled.input<ThemedProps>`
   }
 `;
 
-const Input: React.FC<Props> = ({ value, onContentChanged }) => {
+const Input: React.FC<Props> = ({ value, onMounted, onSubmit, ...props }) => {
   const [state, setState] = useState(value);
+  const stateRef = useRef<string>(value);
+  const input = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const el = input.current;
+
+    const onSubmitEvent = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && onSubmit) onSubmit(stateRef.current);
+    };
+
+    if (el) {
+      if (onMounted) onMounted(el);
+      el.addEventListener("keypress", onSubmitEvent);
+    }
+
+    return () => el?.removeEventListener("keypress", onSubmitEvent);
+  }, []);
 
   useEffect(() => {
     setState(value);
+    stateRef.current = value;
   }, [value]);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState(event.target.value);
-
-    if (onContentChanged) onContentChanged(event.target.value);
+    stateRef.current = event.target.value;
   };
 
-  return <ThemeContext.Consumer>{(theme) => <StyledInput value={state} theme={theme} onChange={onChange} />}</ThemeContext.Consumer>;
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <ThemeContext.Consumer>{(theme) => <StyledInput ref={input} value={state} theme={theme} onChange={onChange} {...props} />}</ThemeContext.Consumer>;
 };
 
 export default Input;
