@@ -22,6 +22,7 @@ const Header = styled.div<ThemedProps>`
   padding: 8px 22px;
   font-size: 14px;
   color: ${(props) => props.theme.fontColor};
+  user-select: none;
 `;
 
 const Project: React.FC<Props> = ({ children, title }) => {

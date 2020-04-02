@@ -15,6 +15,7 @@ import { Item, FileItem } from "@/types";
 
 type Props = {
   items: Item[];
+  title: string;
 
   onItemCreated?: (item: Item) => void;
   onItemsChanged?: (items: Item[]) => void;
@@ -87,7 +88,7 @@ const InnerTabContent = styled.div`
   padding: 0;
 `;
 
-const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemDeleted }) => {
+const Monaka: React.FC<Props> = ({ items, title, onItemsChanged, onItemCreated, onItemDeleted }) => {
   const [tabs, setTabs] = useState<FileItem[]>([]);
   const [models, setModels] = useState<monacoEditor.editor.ITextModel[]>([]);
   const [currentTab, setCurrentTabInner] = useState<FileItem | null>(null);
@@ -192,7 +193,7 @@ const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemD
 
   const onContentChanged = (content: string, _event: any) => {
     const tab = currentTabRef.current!;
-    if (tab.content === content) return;
+    if (tab.content === content && !bufferedTabsRef.current.find((w) => w.id === tab.id)) return;
 
     const newBufferedTabs = bufferedTabsRef.current.slice();
     const buffer = newBufferedTabs.find((w) => w.id === tab.id);
@@ -342,8 +343,8 @@ const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemD
   const onChangedItem = (item: Item) => {
     // if file extension is changed, reopen model
     if (item.type === "file") {
-      const getExtension = (title: string): string => {
-        return title.substring(title.lastIndexOf("."));
+      const getExtension = (filename: string): string => {
+        return filename.substring(filename.lastIndexOf("."));
       };
 
       const oldItem = items.find((w) => w.id === item.id)!;
@@ -380,7 +381,7 @@ const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemD
       {(theme) => (
         <Container theme={theme}>
           <SideArea>
-            <Project title="Monaka Project">
+            <Project title={title}>
               <ProjectSection title="Explorer">
                 <FileTree items={items} onItemChanged={onChangedItem} onItemCreated={onCreatedItem} onItemDeleted={onDeletedItem} onSelectedItemChanged={onSelectedItemChanged} />
               </ProjectSection>

@@ -255,7 +255,7 @@ export const Default = () => {
     <LanguageProvider languages={languages}>
       <IconProvider icons={icons}>
         <Container>
-          <Monaka items={state} onItemsChanged={onItemsChanged} onItemDeleted={onItemDeleted} />
+          <Monaka items={state} title="Monaka Sample Project" onItemsChanged={onItemsChanged} onItemDeleted={onItemDeleted} />
         </Container>
       </IconProvider>
     </LanguageProvider>
