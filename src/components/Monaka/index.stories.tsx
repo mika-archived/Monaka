@@ -243,11 +243,19 @@ export const Default = () => {
     setState(items);
   };
 
+  const onItemDeleted = (item: Item) => {
+    let items: Item[] = [];
+    if (item.type === "file") {
+      items = state.slice().filter((w) => w.id !== item.id);
+    }
+    setState(items);
+  };
+
   return (
     <LanguageProvider languages={languages}>
       <IconProvider icons={icons}>
         <Container>
-          <Monaka items={MonakaProject.items} onItemsChanged={onItemsChanged} />
+          <Monaka items={state} onItemsChanged={onItemsChanged} onItemDeleted={onItemDeleted} />
         </Container>
       </IconProvider>
     </LanguageProvider>
