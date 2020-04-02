@@ -176,7 +176,9 @@ const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemD
 
   const getBufferedContentById = (id: string): string => {
     const buffer = bufferedTabs.find((w) => w.id === id);
-    return buffer?.content || currentTab?.content || "";
+    if (buffer) return buffer.content;
+    if (currentTab) return currentTab.content;
+    return "";
   };
 
   // #region Editor Event Handlers
