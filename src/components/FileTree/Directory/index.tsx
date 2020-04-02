@@ -17,12 +17,14 @@ type ContainerProps = {
 };
 
 const Container = styled.div<ContainerProps>`
+  box-sizing: border-box;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   justify-content: flex-start;
-  width: 100%;
-  height: 20px;
+  width: fit-content;
+  min-width: 100%;
+  height: 24px;
   padding: 2px 0 2px ${(props) => 2 + props.depth * 16}px;
   font-size: 14px;
   color: ${(props) => props.theme.fontColor};

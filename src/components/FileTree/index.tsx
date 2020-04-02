@@ -17,6 +17,10 @@ type Props = {
 };
 
 const Container = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  align-content: stretch;
+  align-items: stretch;
   padding-bottom: 20px;
 `;
 

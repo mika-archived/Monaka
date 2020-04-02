@@ -54,3 +54,8 @@
   cursor: inherit;
   border-bottom: 1px solid #ccc;
 }
+
+.react-contextmenu-wrapper {
+  width: fit-content;
+  min-width: 100%;
+}
