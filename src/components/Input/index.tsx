@@ -14,8 +14,8 @@ type ThemedProps = {
 };
 
 const StyledInput = styled.input<ThemedProps>`
-  padding: 4px 8px;
-  font-size: 12px;
+  padding: 2px 8px;
+  font-size: 14px;
   color: ${(props) => props.theme.fontColor};
   background: ${(props) => (props.theme as Theme).editorBackground};
   border: solid 1px ${(props) => (props.theme as Theme).activeBackground};
