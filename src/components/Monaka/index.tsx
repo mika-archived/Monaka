@@ -62,7 +62,7 @@ const Editor = styled(MonacoEditor)`
 const EditorContainer = styled.div`
   position: relative;
   width: 100%;
-  height: calc(100% - 30px);
+  height: calc(100% - 32px);
 `;
 
 const EditorCalculator = styled.div`
