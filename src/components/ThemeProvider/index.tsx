@@ -11,6 +11,8 @@ export type Theme = {
   hoverBackground: string;
   background: string;
 
+  activeBorderColor: string;
+
   activeFontColor: string;
   fontColor: string;
 };
@@ -27,6 +29,7 @@ const LightTheme: Theme = {
   highlightBackground: "",
   hoverBackground: "",
   background: "",
+  activeBorderColor: "",
   activeFontColor: "",
   fontColor: "#333",
 };
@@ -39,6 +42,7 @@ const DarkTheme: Theme = {
   highlightBackground: "#094771",
   hoverBackground: "#2a2d2e",
   background: "#252526",
+  activeBorderColor: "#094771",
   activeFontColor: "#fff",
   fontColor: "#ccc",
 };
