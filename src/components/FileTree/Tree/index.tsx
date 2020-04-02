@@ -16,39 +16,50 @@ type Props = {
   onItemChanged?: (item: Item) => void;
   onItemCreated?: (item: Item) => void;
   onItemDeleted?: (item: Item) => void;
+  onRenameOverlayStateChanged?: (isEnabled: boolean) => void;
   onSelectStateChanged?: (item: Item | null) => void;
 };
 
-const Container = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  align-content: stretch;
-  align-items: stretch;
-`;
-
-const Tree: React.FC<Props> = ({ items, selectedItem, level, onFolderStateChanged, onItemChanged, onItemCreated, onItemDeleted, onSelectStateChanged }) => {
+const Tree: React.FC<Props> = ({
+  items,
+  selectedItem,
+  level,
+  onFolderStateChanged,
+  onItemChanged,
+  onItemCreated,
+  onItemDeleted,
+  onRenameOverlayStateChanged,
+  onSelectStateChanged,
+}) => {
   return (
     <>
       {items
         .filter((w) => getDepth(items, w) === level)
         .map((w) => {
-          return (
-            <Container key={w.id}>
-              {w.type === "directory" ? (
-                <Directory
-                  items={items}
-                  item={w}
-                  selectedItem={selectedItem}
-                  onFolderStateChanged={onFolderStateChanged}
-                  onItemChanged={onItemChanged}
-                  onItemCreated={onItemCreated}
-                  onItemDeleted={onItemDeleted}
-                  onSelectStateChanged={onSelectStateChanged}
-                />
-              ) : (
-                <File items={items} item={w} selectedItem={selectedItem} onItemChanged={onItemChanged} onItemDeleted={onItemDeleted} onSelectStateChanged={onSelectStateChanged} />
-              )}
-            </Container>
+          return w.type === "directory" ? (
+            <Directory
+              key={w.id}
+              items={items}
+              item={w}
+              selectedItem={selectedItem}
+              onFolderStateChanged={onFolderStateChanged}
+              onItemChanged={onItemChanged}
+              onItemCreated={onItemCreated}
+              onItemDeleted={onItemDeleted}
+              onRenameOverlayStateChanged={onRenameOverlayStateChanged}
+              onSelectStateChanged={onSelectStateChanged}
+            />
+          ) : (
+            <File
+              key={w.id}
+              items={items}
+              item={w}
+              selectedItem={selectedItem}
+              onItemChanged={onItemChanged}
+              onItemDeleted={onItemDeleted}
+              onRenameOverlayStateChanged={onRenameOverlayStateChanged}
+              onSelectStateChanged={onSelectStateChanged}
+            />
           );
         })}
     </>

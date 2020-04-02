@@ -233,22 +233,6 @@ const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemD
 
   // #endregion
 
-  // #region FileTree Event Handlers
-
-  const onCreatedItem = (item: Item) => {
-    if (onItemCreated) onItemCreated(item);
-  };
-
-  const onChangedItem = (item: Item) => {
-    if (onItemsChanged) onItemsChanged([item]);
-  };
-
-  const onDeletedItem = (item: Item) => {
-    if (onItemDeleted) onItemDeleted(item);
-  };
-
-  // #endregion
-
   // #region TabContainer Event Handlers
 
   const showConfirmDialog = (item: FileItem): boolean => {
@@ -345,6 +329,48 @@ const Monaka: React.FC<Props> = ({ items, onItemsChanged, onItemCreated, onItemD
     setBufferedTabs(remainBufferedTabs);
     setModels(remainModels);
     editorInstance.current!.setModel(nextModel);
+  };
+
+  // #endregion
+
+  // #region FileTree Event Handlers
+
+  const onCreatedItem = (item: Item) => {
+    if (onItemCreated) onItemCreated(item);
+  };
+
+  const onChangedItem = (item: Item) => {
+    // if file extension is changed, reopen model
+    if (item.type === "file") {
+      const getExtension = (title: string): string => {
+        return title.substring(title.lastIndexOf("."));
+      };
+
+      const oldItem = items.find((w) => w.id === item.id)!;
+      if (getExtension(oldItem.title) !== getExtension(item.title)) {
+        const oldModel = findModelById(item);
+        if (oldModel) {
+          oldModel.dispose();
+        }
+
+        const newModel = createEditorModel(item)!;
+        editorInstance.current!.setModel(newModel);
+
+        // replace model instance
+        const newModels = models.slice();
+        newModels[newModels.findIndex((w) => w.uri.path === `/${item.id}`)] = newModel;
+        setModels(newModels);
+      }
+    }
+
+    if (onItemsChanged) onItemsChanged([item]);
+  };
+
+  const onDeletedItem = (item: Item) => {
+    const existTab = tabs.find((w) => w.id === item.id);
+    if (existTab) closeTabs([existTab.id]);
+
+    if (onItemDeleted) onItemDeleted(item);
   };
 
   // #endregion

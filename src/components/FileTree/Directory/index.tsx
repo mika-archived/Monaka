@@ -1,11 +1,13 @@
 /* eslint-disable import/no-cycle */
 import React, { useState } from "react";
+import { ContextMenu, MenuItem } from "react-contextmenu";
 import styled from "styled-components";
 
 import Tree from "@/components/FileTree/Tree";
 import { getDepth, getIsSelected } from "@/components/FileTree/utils";
 import { ChevronDown, ChevronRight, FolderClosed, FolderOpened } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
+import StyledContextMenu from "@/components/StyledContextMenu";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
 import { FileIcon, DirectoryItem, Item } from "@/types";
 
@@ -49,12 +51,28 @@ type Props = {
   item: DirectoryItem;
   items: Item[];
   selectedItem: Item | null;
+
   onFolderStateChanged?: (id: string, state: DirectoryItem["state"]) => void;
+  onItemChanged?: (item: Item) => void;
+  onItemCreated?: (item: Item) => void;
+  onItemDeleted?: (item: Item) => void;
+  onRenameOverlayStateChanged?: (isEnabled: boolean) => void;
   onSelectStateChanged?: (item: Item | null) => void;
 };
 
-const Directory: React.FC<Props> = ({ item, items, selectedItem, onFolderStateChanged, onSelectStateChanged }) => {
+const Directory: React.FC<Props> = ({
+  item,
+  items,
+  selectedItem,
+  onItemChanged,
+  onItemCreated,
+  onItemDeleted,
+  onFolderStateChanged,
+  onRenameOverlayStateChanged,
+  onSelectStateChanged,
+}) => {
   const [isOpen, setOpen] = useState(item.state === "opened");
+
   const toggle = (event: React.MouseEvent) => {
     event.stopPropagation();
 
@@ -81,25 +99,48 @@ const Directory: React.FC<Props> = ({ item, items, selectedItem, onFolderStateCh
     return <Component />;
   };
 
+  const id = `FileTree-Directory-ContextMenu-${item.id}`;
+
   return (
-    <ThemeContext.Consumer>
-      {(theme) => (
-        <IconContext.Consumer>
-          {(icons) => (
-            <>
-              <Container className={clazz} depth={depth} theme={theme} onClick={toggle}>
-                {getChevronComponent()}
-                <Icon>{getIconComponent(icons, item.title)}</Icon>
-                <Label>{item.title}</Label>
-              </Container>
-              {isOpen ? (
-                <Tree items={items} selectedItem={selectedItem} level={depth + 1} onFolderStateChanged={onFolderStateChanged} onSelectStateChanged={onSelectStateChanged} />
-              ) : null}
-            </>
-          )}
-        </IconContext.Consumer>
-      )}
-    </ThemeContext.Consumer>
+    <>
+      <ThemeContext.Consumer>
+        {(theme) => (
+          <IconContext.Consumer>
+            {(icons) => (
+              <>
+                <StyledContextMenu id={id}>
+                  <Container className={clazz} depth={depth} theme={theme} onClick={toggle}>
+                    {getChevronComponent()}
+                    <Icon>{getIconComponent(icons, item.title)}</Icon>
+                    <Label>{item.title}</Label>
+                  </Container>
+                </StyledContextMenu>
+                <ContextMenu id={id}>
+                  <MenuItem>New File</MenuItem>
+                  <MenuItem>New Folder</MenuItem>
+                  <MenuItem divider />
+                  <MenuItem>Rename</MenuItem>
+                  <MenuItem>Delete</MenuItem>
+                </ContextMenu>
+                {isOpen ? (
+                  <Tree
+                    items={items}
+                    selectedItem={selectedItem}
+                    level={depth + 1}
+                    onFolderStateChanged={onFolderStateChanged}
+                    onItemChanged={onItemChanged}
+                    onItemCreated={onItemCreated}
+                    onItemDeleted={onItemDeleted}
+                    onRenameOverlayStateChanged={onRenameOverlayStateChanged}
+                    onSelectStateChanged={onSelectStateChanged}
+                  />
+                ) : null}
+              </>
+            )}
+          </IconContext.Consumer>
+        )}
+      </ThemeContext.Consumer>
+    </>
   );
 };
 
