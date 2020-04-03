@@ -4,7 +4,7 @@ export function getDepth(items: Item[], item: Item): number {
   let depth = 0;
   let cur = item;
 
-  while (cur?.parentId !== null) {
+  while (cur && cur.parentId !== null) {
     // eslint-disable-next-line no-loop-func
     cur = items.find((w) => w.id === cur.parentId)!;
     depth += 1;
