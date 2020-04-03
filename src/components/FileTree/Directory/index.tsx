@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 
 import Tree from "@/components/FileTree/Tree";
-import { getDepth, getIsSelected } from "@/components/FileTree/utils";
+import { getDepth, getIsSelected, getChildren } from "@/components/FileTree/utils";
 import { ChevronDown, ChevronRight, FolderClosed, FolderOpened } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
 import Input from "@/components/Input";
@@ -199,7 +199,7 @@ const Directory: React.FC<Props> = ({
                 ) : null}
                 {isOpen ? (
                   <Tree
-                    items={items}
+                    items={getChildren(items, item)}
                     selectedItem={selectedItem}
                     level={depth + 1}
                     onFolderStateChanged={onFolderStateChanged}
