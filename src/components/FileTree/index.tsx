@@ -1,12 +1,14 @@
 /* eslint-disable import/no-cycle */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ContextMenu, MenuItem } from "react-contextmenu";
 import styled from "styled-components";
+import { v4 as uuid } from "uuid";
 
 import Tree from "@/components/FileTree/Tree";
 import { sortPredicate } from "@/components/FileTree/utils";
+import Input from "@/components/Input";
 import StyledContextMenu from "@/components/StyledContextMenu";
-import { Item } from "@/types";
+import { DirectoryItem, FileItem, Item } from "@/types";
 
 type Props = {
   items: Item[];
@@ -28,10 +30,16 @@ const FileTree: React.FC<Props> = ({ items: initialItems, onItemCreated, onItemC
   const [items, setItems] = useState(initialItems.sort(sortPredicate));
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [isEnabledRenameOverlay, setEnabledRenameOverlay] = useState(false);
+  const [temporaryItem, setTemporaryItem] = useState<Item | null>(null);
+  const renamingOverlay = useRef<HTMLInputElement>();
 
   useEffect(() => {
     setItems(initialItems.sort(sortPredicate));
   }, [initialItems]);
+
+  useEffect(() => {
+    if (renamingOverlay.current) renamingOverlay.current.focus();
+  }, [temporaryItem]);
 
   const onFolderStateChanged = (id: string, state: "closed" | "opened") => {
     const newItems = items.slice();
@@ -50,12 +58,40 @@ const FileTree: React.FC<Props> = ({ items: initialItems, onItemCreated, onItemC
     if (onSelectedItemChanged) onSelectedItemChanged(item);
   };
 
+  const onClickNewFile = () => {
+    setTemporaryItem({ type: "file", id: uuid(), parentId: null, title: "", content: "" } as FileItem);
+    setEnabledRenameOverlay(true);
+  };
+
+  const onClickNewFolder = () => {
+    setTemporaryItem({ type: "directory", id: uuid(), parentId: null, title: "", state: "closed" } as DirectoryItem);
+    setEnabledRenameOverlay(true);
+  };
+
+  const onBlur = () => {
+    setTemporaryItem(null);
+    setEnabledRenameOverlay(false);
+  };
+
+  const onMounted = (ref: HTMLInputElement) => {
+    renamingOverlay.current = ref;
+  };
+
+  const onSubmit = (value: any) => {
+    if (typeof value === "string") {
+      setTemporaryItem(null);
+      setEnabledRenameOverlay(false);
+      if (value.trim() !== "" && onItemCreated) onItemCreated({ ...temporaryItem, title: value } as Item);
+    }
+  };
+
   const id = `FileTree-ContextMenu`;
 
   return (
     <>
       <StyledContextMenu id={id} disable={isEnabledRenameOverlay}>
         <Container>
+          {temporaryItem ? <Input value="" onBlur={onBlur} onMounted={onMounted} onSubmit={onSubmit} /> : null}
           <Tree
             items={items}
             selectedItem={selectedItem}
@@ -70,8 +106,12 @@ const FileTree: React.FC<Props> = ({ items: initialItems, onItemCreated, onItemC
         </Container>
       </StyledContextMenu>
       <ContextMenu id={id}>
-        <MenuItem>New File</MenuItem>
-        <MenuItem>New Folder</MenuItem>
+        <MenuItem onClick={onClickNewFile} disabled={!onItemCreated}>
+          New File
+        </MenuItem>
+        <MenuItem onClick={onClickNewFolder} disabled={!onItemCreated}>
+          New Folder
+        </MenuItem>
       </ContextMenu>
     </>
   );

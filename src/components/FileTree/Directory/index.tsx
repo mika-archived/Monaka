@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ContextMenu, MenuItem } from "react-contextmenu";
 import styled from "styled-components";
+import { v4 as uuid } from "uuid";
 
 import Tree from "@/components/FileTree/Tree";
 import { getDepth, getIsSelected } from "@/components/FileTree/utils";
@@ -10,7 +11,7 @@ import { IconContext } from "@/components/IconProvider";
 import Input from "@/components/Input";
 import StyledContextMenu from "@/components/StyledContextMenu";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
-import { FileIcon, DirectoryItem, Item } from "@/types";
+import { DirectoryItem, FileIcon, FileItem, Item } from "@/types";
 
 type ContainerProps = {
   depth: number;
@@ -76,11 +77,16 @@ const Directory: React.FC<Props> = ({
 }) => {
   const [isOpen, setOpen] = useState(item.state === "opened");
   const [isEditing, setIsEditing] = useState(false);
+  const [temporaryItem, setTemporaryItem] = useState<Item | null>(null);
   const renamingOverlay = useRef<HTMLInputElement>();
 
   useEffect(() => {
     if (renamingOverlay.current) renamingOverlay.current.focus();
   }, [isEditing]);
+
+  useEffect(() => {
+    if (renamingOverlay.current) renamingOverlay.current.focus();
+  }, [temporaryItem]);
 
   const toggle = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -120,8 +126,19 @@ const Directory: React.FC<Props> = ({
     if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(true);
   };
 
+  const onClickNewFile = () => {
+    setTemporaryItem({ type: "file", id: uuid(), parentId: item.id, title: "", content: "" } as FileItem);
+    if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(true);
+  };
+
+  const onClickNewFolder = () => {
+    setTemporaryItem({ type: "directory", id: uuid(), parentId: item.id, title: "", state: "closed" } as DirectoryItem);
+    if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(true);
+  };
+
   const onBlur = () => {
     setIsEditing(false);
+    setTemporaryItem(null);
     if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(false);
   };
 
@@ -131,9 +148,16 @@ const Directory: React.FC<Props> = ({
 
   const onSubmit = (value: any) => {
     if (typeof value === "string") {
-      setIsEditing(false);
-      if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(false);
-      if (value.trim() !== "" && onItemChanged) onItemChanged({ ...item, title: value });
+      // renaming or creating
+      if (isEditing) {
+        setIsEditing(false);
+        if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(false);
+        if (value.trim() !== "" && onItemChanged) onItemChanged({ ...item, title: value });
+      } else if (temporaryItem) {
+        setTemporaryItem(null);
+        if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(false);
+        if (value.trim() !== "" && onItemCreated) onItemCreated({ ...temporaryItem, title: value });
+      }
     }
   };
 
@@ -154,12 +178,25 @@ const Directory: React.FC<Props> = ({
                   </Container>
                 </StyledContextMenu>
                 <ContextMenu id={id}>
-                  <MenuItem>New File</MenuItem>
-                  <MenuItem>New Folder</MenuItem>
+                  <MenuItem onClick={onClickNewFile} disabled={!onItemCreated}>
+                    New File
+                  </MenuItem>
+                  <MenuItem onClick={onClickNewFolder} disabled={!onItemCreated}>
+                    New Folder
+                  </MenuItem>
                   <MenuItem divider />
-                  <MenuItem onClick={onClickRenameItem}>Rename</MenuItem>
-                  <MenuItem onClick={onClickDeleteItem}>Delete</MenuItem>
+                  <MenuItem onClick={onClickRenameItem} disabled={!onItemChanged}>
+                    Rename
+                  </MenuItem>
+                  <MenuItem onClick={onClickDeleteItem} disabled={!onItemDeleted}>
+                    Delete
+                  </MenuItem>
                 </ContextMenu>
+                {temporaryItem ? (
+                  <Container depth={depth + 1} theme={theme}>
+                    <Input value="" onBlur={onBlur} onMounted={onMounted} onSubmit={onSubmit} />
+                  </Container>
+                ) : null}
                 {isOpen ? (
                   <Tree
                     items={items}

@@ -1,4 +1,4 @@
-import React, { useState, Children } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import IconProvider from "@/components/IconProvider";
@@ -243,6 +243,10 @@ export const Default = () => {
     setState(items);
   };
 
+  const onItemCreated = (item: Item) => {
+    setState([...state, item]);
+  };
+
   const onItemDeleted = (item: Item) => {
     let items: Item[] = [];
     if (item.type === "file") {
@@ -272,7 +276,7 @@ export const Default = () => {
     <LanguageProvider languages={languages}>
       <IconProvider icons={icons}>
         <Container>
-          <Monaka items={state} title="Monaka Sample Project" onItemsChanged={onItemsChanged} onItemDeleted={onItemDeleted} />
+          <Monaka items={state} title="Monaka Sample Project" onItemsChanged={onItemsChanged} onItemCreated={onItemCreated} onItemDeleted={onItemDeleted} />
         </Container>
       </IconProvider>
     </LanguageProvider>
