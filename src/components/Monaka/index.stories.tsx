@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { getChildren } from "@/components/FileTree/utils";
 import IconProvider from "@/components/IconProvider";
 import LanguageProvider from "@/components/LanguageProvider";
 import { FileItem, Item } from "@/types";
@@ -252,22 +253,7 @@ export const Default = () => {
     if (item.type === "file") {
       items = state.slice().filter((w) => w.id !== item.id);
     } else if (item.type === "directory") {
-      // eslint-disable-next-line no-shadow
-      const getChildItems = (items: Item[], item: Item): Item[] => {
-        const children: Item[] = [];
-        const directChildren = items.filter((w) => w.parentId === item.id);
-        children.push(...directChildren);
-
-        const directories = directChildren.filter((w) => w.type === "directory");
-        for (let i = 0; i < directories.length; i += 1) {
-          children.push(...getChildItems(items, directories[i]));
-        }
-
-        return children;
-      };
-
-      const removed = [item, ...getChildItems(state, item)];
-      items = state.slice().filter((w) => !removed.find((v) => v.id === w.id));
+      items = state.slice().filter((w) => !getChildren(state, item).find((v) => v.id === w.id));
     }
     setState(items);
   };

@@ -13,6 +13,21 @@ export function getDepth(items: Item[], item: Item): number {
   return depth;
 }
 
+export function getChildren(items: Item[], item: Item): Item[] {
+  const children: Item[] = [];
+  const directChildren = items.filter((w) => w.parentId === item.id);
+  children.push(...directChildren);
+
+  const directories = directChildren.filter((w) => w.type === "directory");
+  for (let i = 0; i < directories.length; i += 1) {
+    children.push(...getChildren(items, directories[i]));
+  }
+
+  return [item, ...children].filter((w, i, array) => {
+    return i === array.findIndex((v) => v.id === w.id);
+  });
+}
+
 export function getIsSelected(item: Item, selected: Item | null): boolean {
   return item.id === selected?.id;
 }
