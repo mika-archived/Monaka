@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ContextMenu, MenuItem } from "react-contextmenu";
 import styled from "styled-components";
 
@@ -7,6 +7,7 @@ import Tree from "@/components/FileTree/Tree";
 import { getDepth, getIsSelected } from "@/components/FileTree/utils";
 import { ChevronDown, ChevronRight, FolderClosed, FolderOpened } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
+import Input from "@/components/Input";
 import StyledContextMenu from "@/components/StyledContextMenu";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
 import { FileIcon, DirectoryItem, Item } from "@/types";
@@ -74,6 +75,12 @@ const Directory: React.FC<Props> = ({
   onSelectStateChanged,
 }) => {
   const [isOpen, setOpen] = useState(item.state === "opened");
+  const [isEditing, setIsEditing] = useState(false);
+  const renamingOverlay = useRef<HTMLInputElement>();
+
+  useEffect(() => {
+    if (renamingOverlay.current) renamingOverlay.current.focus();
+  }, [isEditing]);
 
   const toggle = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -101,6 +108,28 @@ const Directory: React.FC<Props> = ({
     return <Component />;
   };
 
+  const onClickRenameItem = () => {
+    setIsEditing(true);
+    if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(true);
+  };
+
+  const onBlur = () => {
+    setIsEditing(false);
+    if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(false);
+  };
+
+  const onMounted = (ref: HTMLInputElement) => {
+    renamingOverlay.current = ref;
+  };
+
+  const onSubmit = (value: any) => {
+    if (typeof value === "string") {
+      setIsEditing(false);
+      if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(false);
+      if (value.trim() !== "" && onItemChanged) onItemChanged({ ...item, title: value });
+    }
+  };
+
   const id = `FileTree-Directory-ContextMenu-${item.id}`;
 
   return (
@@ -110,18 +139,18 @@ const Directory: React.FC<Props> = ({
           <IconContext.Consumer>
             {(icons) => (
               <>
-                <StyledContextMenu id={id}>
+                <StyledContextMenu id={id} disable={isEditing}>
                   <Container className={clazz} depth={depth} theme={theme} onClick={toggle}>
                     {getChevronComponent()}
                     <Icon>{getIconComponent(icons, item.title)}</Icon>
-                    <Label>{item.title}</Label>
+                    {isEditing ? <Input value={item.title} onBlur={onBlur} onMounted={onMounted} onSubmit={onSubmit} /> : <Label>{item.title}</Label>}
                   </Container>
                 </StyledContextMenu>
                 <ContextMenu id={id}>
                   <MenuItem>New File</MenuItem>
                   <MenuItem>New Folder</MenuItem>
                   <MenuItem divider />
-                  <MenuItem>Rename</MenuItem>
+                  <MenuItem onClick={onClickRenameItem}>Rename</MenuItem>
                   <MenuItem>Delete</MenuItem>
                 </ContextMenu>
                 {isOpen ? (
