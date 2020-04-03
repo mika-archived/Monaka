@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { getChildren } from "@/components/FileTree/utils";
 import IconProvider from "@/components/IconProvider";
 import LanguageProvider from "@/components/LanguageProvider";
+import ProjectSection from "@/components/Project/ProjectSection";
 import { FileItem, Item } from "@/types";
 import Monaka from ".";
 
@@ -262,7 +263,11 @@ export const Default = () => {
     <LanguageProvider languages={languages}>
       <IconProvider icons={icons}>
         <Container>
-          <Monaka items={state} title="Monaka Sample Project" onItemsChanged={onItemsChanged} onItemCreated={onItemCreated} onItemDeleted={onItemDeleted} />
+          <Monaka items={state} title="Monaka Sample Project" onItemsChanged={onItemsChanged} onItemCreated={onItemCreated} onItemDeleted={onItemDeleted}>
+            <ProjectSection title="Outline" />
+            <ProjectSection title="NPM Scripts" />
+            <ProjectSection title="Bazel Build Targets" />
+          </Monaka>
         </Container>
       </IconProvider>
     </LanguageProvider>
