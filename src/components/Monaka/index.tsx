@@ -88,7 +88,7 @@ const InnerTabContent = styled.div`
   padding: 0;
 `;
 
-const Monaka: React.FC<Props> = ({ items, title, onItemsChanged, onItemCreated, onItemDeleted }) => {
+const Monaka: React.FC<Props> = ({ children, items, title, onItemsChanged, onItemCreated, onItemDeleted }) => {
   const [tabs, setTabs] = useState<FileItem[]>([]);
   const [models, setModels] = useState<monacoEditor.editor.ITextModel[]>([]);
   const [currentTab, setCurrentTabInner] = useState<FileItem | null>(null);
@@ -385,6 +385,7 @@ const Monaka: React.FC<Props> = ({ items, title, onItemsChanged, onItemCreated, 
               <ProjectSection title="Explorer">
                 <FileTree items={items} onItemChanged={onChangedItem} onItemCreated={onCreatedItem} onItemDeleted={onDeletedItem} onSelectedItemChanged={onSelectedItemChanged} />
               </ProjectSection>
+              {children}
             </Project>
           </SideArea>
           <Content>
