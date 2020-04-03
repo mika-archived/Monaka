@@ -1,5 +1,5 @@
 {
-  "name": "@mikazuki/monaka",
+  "name": "@mika-f/monaka",
   "version": "0.1.0",
   "description": "A Web IDE using React",
   "main": "dist/index.js",
@@ -7,7 +7,9 @@
   "author": "Mikazuki <mikazuki_fuyuno@outlook.com>",
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "private": false,
   "scripts": {
