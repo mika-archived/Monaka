@@ -108,6 +108,13 @@ const Directory: React.FC<Props> = ({
     return <Component />;
   };
 
+  const onClickDeleteItem = () => {
+    // eslint-disable-next-line no-alert
+    if (window.confirm(`Are you sure you want to delete ${item.title} and its contents?`)) {
+      if (onItemDeleted) onItemDeleted(item);
+    }
+  };
+
   const onClickRenameItem = () => {
     setIsEditing(true);
     if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(true);
@@ -151,7 +158,7 @@ const Directory: React.FC<Props> = ({
                   <MenuItem>New Folder</MenuItem>
                   <MenuItem divider />
                   <MenuItem onClick={onClickRenameItem}>Rename</MenuItem>
-                  <MenuItem>Delete</MenuItem>
+                  <MenuItem onClick={onClickDeleteItem}>Delete</MenuItem>
                 </ContextMenu>
                 {isOpen ? (
                   <Tree
