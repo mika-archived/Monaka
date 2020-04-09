@@ -20,6 +20,7 @@ type WrapperProps = {
 } & ThemedProps;
 
 const Content = styled.div`
+  height: 100%;
   padding: 2px;
 `;
 
@@ -46,8 +47,18 @@ const Title = styled.div<ThemedProps>`
 `;
 
 const Wrapper = styled.div<WrapperProps>`
-  flex: ${(props) => (props.fixed ? "0 0" : "1 1")} auto;
+  display: flex;
+  flex: 0 0 auto;
+  flex-flow: column nowrap;
   overflow: hidden;
+
+  .monaka-global-project-section {
+    height: 100%;
+  }
+
+  div[data-simplebar="init"] {
+    height: 100%;
+  }
 `;
 
 const ProjectSection: React.FC<Props> = ({ children, className, fixed, title }) => {
@@ -63,7 +74,7 @@ const ProjectSection: React.FC<Props> = ({ children, className, fixed, title }) 
             <Icon>{isExpanded ? <ChevronDown /> : <ChevronRight />}</Icon>
             <Label theme={theme}>{title}</Label>
           </Title>
-          <AnimateHeight duration={100} height={isExpanded ? "auto" : 0}>
+          <AnimateHeight contentClassName="monaka-global-project-section" duration={100} height={isExpanded ? "auto" : 0} style={{ flex: "1 1 auto" }}>
             {/* expand animation not working */}
             <Scroller>
               <Content>{children}</Content>
