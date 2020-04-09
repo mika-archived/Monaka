@@ -9,6 +9,16 @@ You can try this project in Arteria!
 
 ## Usage
 
+### Installation
+
+```bash
+$ touch .npmrc
+$ echo "@mika-f:registry=https://npm.pkg.github.com/" >> .npmrc
+$ yarn add @mika-f/monaka
+```
+
+### Write code
+
 ```tsx
 import React, { useState } from "react";
 import Monaka, { Item, Section } from "@mikazuki/monaka";
