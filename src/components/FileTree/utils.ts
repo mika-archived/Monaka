@@ -34,7 +34,8 @@ export function getIsSelected(item: Item, selected: Item | null): boolean {
 }
 
 export function getIsValidPath(path: string): boolean {
-  return !isInvalid(path, { file: true });
+  const isContainsInvalidChars = path === "." || path === ".." || path === "/";
+  return !isInvalid(path, { file: true }) && !isContainsInvalidChars;
 }
 
 // https://codesandbox.io/s/84jkx

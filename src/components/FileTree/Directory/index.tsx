@@ -161,6 +161,14 @@ const Directory: React.FC<Props> = ({
     }
   };
 
+  const onIsValid = (value: string) => {
+    if (getIsValidPath(value)) {
+      return null;
+    }
+
+    return "Invalid pathname";
+  };
+
   const id = `FileTree-Directory-ContextMenu-${item.id}`;
 
   return (
@@ -174,7 +182,7 @@ const Directory: React.FC<Props> = ({
                   <Container className={clazz} depth={depth} theme={theme} onClick={toggle}>
                     {getChevronComponent()}
                     <Icon>{getIconComponent(icons, item.title)}</Icon>
-                    {isEditing ? <Input value={item.title} onBlur={onBlur} onMounted={onMounted} onSubmit={onSubmit} /> : <Label>{item.title}</Label>}
+                    {isEditing ? <Input value={item.title} onBlur={onBlur} onIsValid={onIsValid} onMounted={onMounted} onSubmit={onSubmit} /> : <Label>{item.title}</Label>}
                   </Container>
                 </StyledContextMenu>
                 <ContextMenu id={id}>

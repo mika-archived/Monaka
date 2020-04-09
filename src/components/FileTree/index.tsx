@@ -85,13 +85,21 @@ const FileTree: React.FC<Props> = ({ items: initialItems, onItemCreated, onItemC
     }
   };
 
+  const onIsValid = (value: string) => {
+    if (getIsValidPath(value)) {
+      return null;
+    }
+
+    return "Invalid pathname";
+  };
+
   const id = `FileTree-ContextMenu`;
 
   return (
     <>
       <StyledContextMenu id={id} disable={isEnabledRenameOverlay}>
         <Container>
-          {temporaryItem ? <Input value="" onBlur={onBlur} onMounted={onMounted} onSubmit={onSubmit} /> : null}
+          {temporaryItem ? <Input value="" onBlur={onBlur} onIsValid={onIsValid} onMounted={onMounted} onSubmit={onSubmit} /> : null}
           <Tree
             items={items}
             selectedItem={selectedItem}

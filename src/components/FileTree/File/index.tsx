@@ -116,6 +116,14 @@ const File: React.FC<Props> = ({ item, items, selectedItem, onItemChanged, onIte
     }
   };
 
+  const onIsValid = (value: string) => {
+    if (getIsValidPath(value)) {
+      return null;
+    }
+
+    return "Invalid pathname";
+  };
+
   const id = `FileTree-File-ContextMenu-${item.id}`;
 
   return (
@@ -127,7 +135,7 @@ const File: React.FC<Props> = ({ item, items, selectedItem, onItemChanged, onIte
               {(icons) => (
                 <Container className={clazz} depth={depth} theme={theme} onClick={onClickItem}>
                   <Icon>{getIconComponent(icons, item.title)}</Icon>
-                  {isEditing ? <Input value={item.title} onBlur={onBlur} onMounted={onMounted} onSubmit={onSubmit} /> : <Label>{item.title}</Label>}
+                  {isEditing ? <Input value={item.title} onBlur={onBlur} onIsValid={onIsValid} onMounted={onMounted} onSubmit={onSubmit} /> : <Label>{item.title}</Label>}
                 </Container>
               )}
             </IconContext.Consumer>

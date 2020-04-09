@@ -14,6 +14,8 @@ module.exports = {
       ],
     });
 
+    config.node = { path: true };
+
     config.resolve.extensions.push(".ts", ".tsx");
     config.resolve.alias = { "@": path.resolve(__dirname, "../src") };
 
