@@ -8,7 +8,7 @@ import { IconContext } from "@/components/IconProvider";
 import Input from "@/components/Input";
 import StyledContextMenu from "@/components/StyledContextMenu";
 import { ThemeContext, Theme } from "@/components/ThemeProvider";
-import { getDepth, getIsSelected } from "@/components/FileTree/utils";
+import { getDepth, getIsSelected, getIsValidPath } from "@/components/FileTree/utils";
 import { FileIcon, FileItem, Item } from "@/types";
 
 type ContainerProps = {
@@ -112,7 +112,7 @@ const File: React.FC<Props> = ({ item, items, selectedItem, onItemChanged, onIte
     if (typeof value === "string") {
       setIsEditing(false);
       if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(false);
-      if (value.trim() !== "" && onItemChanged) onItemChanged({ ...item, title: value });
+      if (value.trim() !== "" && getIsValidPath(value.trim()) && onItemChanged) onItemChanged({ ...item, title: value.trim() });
     }
   };
 

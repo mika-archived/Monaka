@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 
 import Tree from "@/components/FileTree/Tree";
-import { getDepth, getIsSelected, getChildren } from "@/components/FileTree/utils";
+import { getDepth, getIsSelected, getIsValidPath, getChildren } from "@/components/FileTree/utils";
 import { ChevronDown, ChevronRight, FolderClosed, FolderOpened } from "@/components/Icon";
 import { IconContext } from "@/components/IconProvider";
 import Input from "@/components/Input";
@@ -152,11 +152,11 @@ const Directory: React.FC<Props> = ({
       if (isEditing) {
         setIsEditing(false);
         if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(false);
-        if (value.trim() !== "" && onItemChanged) onItemChanged({ ...item, title: value });
+        if (value.trim() !== "" && getIsValidPath(value.trim()) && onItemChanged) onItemChanged({ ...item, title: value.trim() });
       } else if (temporaryItem) {
         setTemporaryItem(null);
         if (onRenameOverlayStateChanged) onRenameOverlayStateChanged(false);
-        if (value.trim() !== "" && onItemCreated) onItemCreated({ ...temporaryItem, title: value });
+        if (value.trim() !== "" && getIsValidPath(value.trim()) && onItemCreated) onItemCreated({ ...temporaryItem, title: value.trim() });
       }
     }
   };

@@ -1,3 +1,5 @@
+import isInvalid from "is-invalid-path";
+
 import { Item } from "@/types";
 
 export function getDepth(items: Item[], item: Item): number {
@@ -12,7 +14,6 @@ export function getDepth(items: Item[], item: Item): number {
 
   return depth;
 }
-
 export function getChildren(items: Item[], item: Item): Item[] {
   const children: Item[] = [];
   const directChildren = items.filter((w) => w.parentId === item.id);
@@ -30,6 +31,10 @@ export function getChildren(items: Item[], item: Item): Item[] {
 
 export function getIsSelected(item: Item, selected: Item | null): boolean {
   return item.id === selected?.id;
+}
+
+export function getIsValidPath(path: string): boolean {
+  return !isInvalid(path, { file: true });
 }
 
 // https://codesandbox.io/s/84jkx

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { v4 as uuid } from "uuid";
 
 import Tree from "@/components/FileTree/Tree";
-import { sortPredicate } from "@/components/FileTree/utils";
+import { sortPredicate, getIsValidPath } from "@/components/FileTree/utils";
 import Input from "@/components/Input";
 import StyledContextMenu from "@/components/StyledContextMenu";
 import { DirectoryItem, FileItem, Item } from "@/types";
@@ -81,7 +81,7 @@ const FileTree: React.FC<Props> = ({ items: initialItems, onItemCreated, onItemC
     if (typeof value === "string") {
       setTemporaryItem(null);
       setEnabledRenameOverlay(false);
-      if (value.trim() !== "" && onItemCreated) onItemCreated({ ...temporaryItem, title: value } as Item);
+      if (value.trim() !== "" && getIsValidPath(value.trim()) && onItemCreated) onItemCreated({ ...temporaryItem, title: value.trim() } as Item);
     }
   };
 

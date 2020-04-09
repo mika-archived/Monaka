@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "description": "A Web IDE using React",
   "main": "dist/index.js",
-  "repository": "ssh://git@github.com/mika-f/monaka",
+  "repository": "https://github.com/mika-f/Monaka",
   "author": "Mikazuki <mikazuki_fuyuno@outlook.com>",
   "license": "MIT",
   "files": [
@@ -18,6 +18,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "is-invalid-path": "^1.0.2",
     "monaco-editor": "^0.20.0",
     "react": "^16.13.1",
     "react-animate-height": "^2.0.20",
