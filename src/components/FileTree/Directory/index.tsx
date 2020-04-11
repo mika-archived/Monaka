@@ -182,7 +182,11 @@ const Directory: React.FC<Props> = ({
                   <Container className={clazz} depth={depth} theme={theme} onClick={toggle}>
                     {getChevronComponent()}
                     <Icon>{getIconComponent(icons, item.title)}</Icon>
-                    {isEditing ? <Input value={item.title} onBlur={onBlur} onIsValid={onIsValid} onMounted={onMounted} onSubmit={onSubmit} /> : <Label>{item.title}</Label>}
+                    {isEditing ? (
+                      <Input value={item.title} mode="Submit" onBlur={onBlur} onIsValid={onIsValid} onMounted={onMounted} onSubmit={onSubmit} />
+                    ) : (
+                      <Label>{item.title}</Label>
+                    )}
                   </Container>
                 </StyledContextMenu>
                 <ContextMenu id={id}>
@@ -202,7 +206,7 @@ const Directory: React.FC<Props> = ({
                 </ContextMenu>
                 {temporaryItem ? (
                   <Container depth={depth + 1} theme={theme}>
-                    <Input value="" onBlur={onBlur} onMounted={onMounted} onSubmit={onSubmit} />
+                    <Input value="" mode="Submit" onBlur={onBlur} onMounted={onMounted} onSubmit={onSubmit} />
                   </Container>
                 ) : null}
                 {isOpen ? (

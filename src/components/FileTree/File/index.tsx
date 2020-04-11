@@ -135,7 +135,11 @@ const File: React.FC<Props> = ({ item, items, selectedItem, onItemChanged, onIte
               {(icons) => (
                 <Container className={clazz} depth={depth} theme={theme} onClick={onClickItem}>
                   <Icon>{getIconComponent(icons, item.title)}</Icon>
-                  {isEditing ? <Input value={item.title} onBlur={onBlur} onIsValid={onIsValid} onMounted={onMounted} onSubmit={onSubmit} /> : <Label>{item.title}</Label>}
+                  {isEditing ? (
+                    <Input value={item.title} mode="Submit" onBlur={onBlur} onIsValid={onIsValid} onMounted={onMounted} onSubmit={onSubmit} />
+                  ) : (
+                    <Label>{item.title}</Label>
+                  )}
                 </Container>
               )}
             </IconContext.Consumer>

@@ -99,7 +99,7 @@ const FileTree: React.FC<Props> = ({ items: initialItems, onItemCreated, onItemC
     <>
       <StyledContextMenu id={id} disable={isEnabledRenameOverlay}>
         <Container>
-          {temporaryItem ? <Input value="" onBlur={onBlur} onIsValid={onIsValid} onMounted={onMounted} onSubmit={onSubmit} /> : null}
+          {temporaryItem ? <Input value="" mode="Submit" onBlur={onBlur} onIsValid={onIsValid} onMounted={onMounted} onSubmit={onSubmit} /> : null}
           <Tree
             items={items}
             selectedItem={selectedItem}

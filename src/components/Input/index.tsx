@@ -5,6 +5,7 @@ import { ThemeContext, Theme } from "../ThemeProvider";
 
 type Props = {
   value: string;
+  mode: "Submit" | "PropertyChanged";
   onMounted?: (ref: HTMLInputElement) => void;
   onSubmit?: (value: string) => void;
   onIsValid?: (value: string) => string | null;
@@ -41,7 +42,7 @@ const StyledInput = styled.input<ThemedProps>`
   }
 `;
 
-const Input: React.FC<Props> = ({ value, onMounted, onSubmit, onIsValid, ...props }) => {
+const Input: React.FC<Props> = ({ value, mode, onMounted, onSubmit, onIsValid, ...props }) => {
   const [state, setState] = useState(value);
   const [error, setError] = useState<string | null>(null);
   const stateRef = useRef<string>(value);
@@ -66,7 +67,7 @@ const Input: React.FC<Props> = ({ value, onMounted, onSubmit, onIsValid, ...prop
     }
 
     return () => el?.removeEventListener("keypress", onSubmitEvent);
-  }, []);
+  }, [onSubmit]);
 
   useEffect(() => {
     setState(value);
@@ -81,6 +82,8 @@ const Input: React.FC<Props> = ({ value, onMounted, onSubmit, onIsValid, ...prop
 
     setState(newValue);
     stateRef.current = newValue;
+
+    if (mode === "PropertyChanged" && onSubmit) onSubmit(newValue);
   };
 
   return (
