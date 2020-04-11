@@ -56,6 +56,7 @@ type Props = {
   item: FileItem;
   items: Item[];
   selectedItem: Item | null;
+  readonly?: boolean;
 
   onItemChanged?: (item: Item) => void;
   onItemDeleted?: (item: Item) => void;
@@ -63,7 +64,7 @@ type Props = {
   onSelectStateChanged?: (item: Item | null) => void;
 };
 
-const File: React.FC<Props> = ({ item, items, selectedItem, onItemChanged, onItemDeleted, onRenameOverlayStateChanged, onSelectStateChanged }) => {
+const File: React.FC<Props> = ({ item, items, selectedItem, readonly, onItemChanged, onItemDeleted, onRenameOverlayStateChanged, onSelectStateChanged }) => {
   const [isEditing, setIsEditing] = useState(false);
   const renamingOverlay = useRef<HTMLInputElement>();
 
@@ -128,7 +129,7 @@ const File: React.FC<Props> = ({ item, items, selectedItem, onItemChanged, onIte
 
   return (
     <>
-      <StyledContextMenu id={id} disable={isEditing}>
+      <StyledContextMenu id={id} disable={isEditing || readonly}>
         <ThemeContext.Consumer>
           {(theme) => (
             <IconContext.Consumer>

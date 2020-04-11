@@ -10,6 +10,7 @@ type Props = {
   items: Item[];
   selectedItem: Item | null;
   level: number;
+  readonly?: boolean;
 
   onFolderStateChanged?: (id: string, state: DirectoryItem["state"]) => void;
   onItemChanged?: (item: Item) => void;
@@ -23,6 +24,7 @@ const Tree: React.FC<Props> = ({
   items,
   selectedItem,
   level,
+  readonly,
   onFolderStateChanged,
   onItemChanged,
   onItemCreated,
@@ -41,6 +43,7 @@ const Tree: React.FC<Props> = ({
               items={items}
               item={w}
               selectedItem={selectedItem}
+              readonly={readonly}
               onFolderStateChanged={onFolderStateChanged}
               onItemChanged={onItemChanged}
               onItemCreated={onItemCreated}
@@ -53,6 +56,7 @@ const Tree: React.FC<Props> = ({
               key={w.id}
               items={items}
               item={w}
+              readonly={readonly}
               selectedItem={selectedItem}
               onItemChanged={onItemChanged}
               onItemDeleted={onItemDeleted}

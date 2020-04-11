@@ -20,7 +20,7 @@ export const Default = () => {
 
   return (
     <LimitedWidth>
-      <Input value={value} onSubmit={onValueChanged} />
+      <Input value={value} mode="Submit" onSubmit={onValueChanged} />
     </LimitedWidth>
   );
 };

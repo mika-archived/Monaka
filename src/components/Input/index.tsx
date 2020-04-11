@@ -58,6 +58,7 @@ const Input: React.FC<Props> = ({ value, mode, onMounted, onSubmit, onIsValid, .
         }
 
         if (onSubmit) onSubmit(stateRef.current);
+        stateRef.current = "";
       }
     };
 

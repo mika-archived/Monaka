@@ -273,3 +273,33 @@ export const Default = () => {
     </LanguageProvider>
   );
 };
+
+export const Readonly = () => {
+  const [state] = useState(MonakaProject.items);
+
+  const onItemsChanged = (_changesets: Item[]) => {
+    // never called
+  };
+
+  const onItemCreated = (_item: Item) => {
+    // never called
+  };
+
+  const onItemDeleted = (_item: Item) => {
+    // never called
+  };
+
+  return (
+    <LanguageProvider languages={languages}>
+      <IconProvider icons={icons}>
+        <Container>
+          <Monaka items={state} title="Monaka Sample Project" readonly onItemsChanged={onItemsChanged} onItemCreated={onItemCreated} onItemDeleted={onItemDeleted}>
+            <ProjectSection title="Outline" />
+            <ProjectSection title="NPM Scripts" />
+            <ProjectSection title="Bazel Build Targets" />
+          </Monaka>
+        </Container>
+      </IconProvider>
+    </LanguageProvider>
+  );
+};

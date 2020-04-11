@@ -55,6 +55,7 @@ type Props = {
   item: DirectoryItem;
   items: Item[];
   selectedItem: Item | null;
+  readonly?: boolean;
 
   onFolderStateChanged?: (id: string, state: DirectoryItem["state"]) => void;
   onItemChanged?: (item: Item) => void;
@@ -68,6 +69,7 @@ const Directory: React.FC<Props> = ({
   item,
   items,
   selectedItem,
+  readonly,
   onItemChanged,
   onItemCreated,
   onItemDeleted,
@@ -178,7 +180,7 @@ const Directory: React.FC<Props> = ({
           <IconContext.Consumer>
             {(icons) => (
               <>
-                <StyledContextMenu id={id} disable={isEditing}>
+                <StyledContextMenu id={id} disable={isEditing || readonly}>
                   <Container className={clazz} depth={depth} theme={theme} onClick={toggle}>
                     {getChevronComponent()}
                     <Icon>{getIconComponent(icons, item.title)}</Icon>
@@ -214,6 +216,7 @@ const Directory: React.FC<Props> = ({
                     items={getChildren(items, item)}
                     selectedItem={selectedItem}
                     level={depth + 1}
+                    readonly={readonly || false}
                     onFolderStateChanged={onFolderStateChanged}
                     onItemChanged={onItemChanged}
                     onItemCreated={onItemCreated}

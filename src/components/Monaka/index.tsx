@@ -16,6 +16,7 @@ import { Item, FileItem } from "@/types";
 type Props = {
   items: Item[];
   title: string;
+  readonly?: boolean;
 
   onItemCreated?: (item: Item) => void;
   onItemsChanged?: (items: Item[]) => void;
@@ -88,7 +89,7 @@ const InnerTabContent = styled.div`
   padding: 0;
 `;
 
-const Monaka: React.FC<Props> = ({ children, items, title, onItemsChanged, onItemCreated, onItemDeleted }) => {
+const Monaka: React.FC<Props> = ({ children, items, title, readonly, onItemsChanged, onItemCreated, onItemDeleted }) => {
   const [tabs, setTabs] = useState<FileItem[]>([]);
   const [models, setModels] = useState<monacoEditor.editor.ITextModel[]>([]);
   const [currentTab, setCurrentTabInner] = useState<FileItem | null>(null);
@@ -383,7 +384,14 @@ const Monaka: React.FC<Props> = ({ children, items, title, onItemsChanged, onIte
           <SideArea>
             <Project title={title}>
               <ProjectSection title="Explorer">
-                <FileTree items={items} onItemChanged={onChangedItem} onItemCreated={onCreatedItem} onItemDeleted={onDeletedItem} onSelectedItemChanged={onSelectedItemChanged} />
+                <FileTree
+                  items={items}
+                  readonly={readonly || false}
+                  onItemChanged={onChangedItem}
+                  onItemCreated={onCreatedItem}
+                  onItemDeleted={onDeletedItem}
+                  onSelectedItemChanged={onSelectedItemChanged}
+                />
               </ProjectSection>
               {children}
             </Project>
@@ -400,7 +408,7 @@ const Monaka: React.FC<Props> = ({ children, items, title, onItemsChanged, onIte
                     <EditorCalculator ref={editorContainer} />
                     <Editor
                       value={getBufferedContentById(currentTab.id)}
-                      options={{ automaticLayout: true }}
+                      options={{ automaticLayout: true, readOnly: readonly || false }}
                       onContentChanged={onContentChanged}
                       onEditorMounted={onEditorMounted}
                       onEditorUnmounted={onEditorUnmounted}

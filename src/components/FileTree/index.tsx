@@ -12,6 +12,8 @@ import { DirectoryItem, FileItem, Item } from "@/types";
 
 type Props = {
   items: Item[];
+  readonly?: boolean;
+
   onItemChanged?: (item: Item) => void;
   onItemCreated?: (item: Item) => void;
   onItemDeleted?: (item: Item) => void;
@@ -26,7 +28,7 @@ const Container = styled.div`
   padding-bottom: 20px;
 `;
 
-const FileTree: React.FC<Props> = ({ items: initialItems, onItemCreated, onItemChanged, onItemDeleted, onSelectedItemChanged }) => {
+const FileTree: React.FC<Props> = ({ items: initialItems, readonly, onItemCreated, onItemChanged, onItemDeleted, onSelectedItemChanged }) => {
   const [items, setItems] = useState(initialItems.sort(sortPredicate));
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [isEnabledRenameOverlay, setEnabledRenameOverlay] = useState(false);
@@ -97,13 +99,14 @@ const FileTree: React.FC<Props> = ({ items: initialItems, onItemCreated, onItemC
 
   return (
     <>
-      <StyledContextMenu id={id} disable={isEnabledRenameOverlay}>
+      <StyledContextMenu id={id} disable={isEnabledRenameOverlay || readonly}>
         <Container>
           {temporaryItem ? <Input value="" mode="Submit" onBlur={onBlur} onIsValid={onIsValid} onMounted={onMounted} onSubmit={onSubmit} /> : null}
           <Tree
             items={items}
             selectedItem={selectedItem}
             level={0}
+            readonly={readonly}
             onItemChanged={onItemChanged}
             onItemCreated={onItemCreated}
             onItemDeleted={onItemDeleted}
