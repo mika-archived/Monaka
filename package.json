@@ -1,6 +1,6 @@
 {
   "name": "@mika-f/monaka",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A Web IDE using React",
   "main": "dist/index.js",
   "repository": "https://github.com/mika-f/Monaka",
