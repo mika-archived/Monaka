@@ -103,6 +103,12 @@ const Monaka: React.FC<Props> = ({ children, items, title, readonly, onItemsChan
   const languages = useContext(LanguageContext);
   const size = useSize();
 
+  useEffect(() => {
+    return () => {
+      for (let i = 0; i < models.length; i += 1) models[i].dispose();
+    };
+  }, []);
+
   // resize monaco-editor
   useEffect(() => {
     if (editorInstance.current) {
